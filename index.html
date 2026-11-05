@@ -16,14 +16,14 @@
 <!-- Open Graph / Twitter -->
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="IIVR-SP" />
-<meta property="og:title" content="IIVR-SP — São Paulo Repeat-Sales House Price Index" />
+<meta property="og:title" content="IIVR-SP — São Paulo Repeat-Sales Housing Index" />
 <meta property="og:description" content="A Case-Shiller repeat-sales house price index for São Paulo (2010–2025), benchmarked against IPCA, CDI, FipeZAP and the Ibovespa. Open data." />
 <meta property="og:url" content="https://otaviolmbraga.github.io/sp-housing-index/" />
 <meta property="og:image" content="https://otaviolmbraga.github.io/sp-housing-index/og-image.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="IIVR-SP — São Paulo Repeat-Sales House Price Index" />
+<meta name="twitter:title" content="IIVR-SP — São Paulo Repeat-Sales Housing Index" />
 <meta name="twitter:description" content="A Case-Shiller repeat-sales house price index for São Paulo (2010–2025). Open data and documents." />
 <meta name="twitter:image" content="https://otaviolmbraga.github.io/sp-housing-index/og-image.png" />
 
@@ -32,7 +32,7 @@
 {
   "@context":"https://schema.org",
   "@type":"Dataset",
-  "name":"IIVR-SP — São Paulo Repeat-Sales House Price Index",
+  "name":"IIVR-SP — São Paulo Repeat-Sales Housing Index",
   "alternateName":"Índice Imobiliário de Vendas Repetidas de São Paulo",
   "description":"A repeat-sales (Case-Shiller method) house price index for the city of São Paulo, built from ITBI property-transfer-tax microdata and benchmarked against IPCA, CDI, FipeZAP and the Ibovespa, 2010–2025.",
   "url":"https://otaviolmbraga.github.io/sp-housing-index/",
@@ -194,6 +194,7 @@
   @media (max-width:760px){
     h1{font-size:2rem}
     .plotgrid{grid-template-columns:1fr}
+    #chart{height:380px}
     .side{border-left:0;border-top:1px solid var(--rule-soft);padding-left:0;padding-top:16px;margin-top:4px}
     .dh-num{font-size:1.7rem}
     .data-hero{align-items:flex-start}
@@ -233,6 +234,13 @@
   </section>
 
   <section class="card">
+    <p class="kicker" data-i18n="gloss_kicker"></p>
+    <h2 id="gloss-q"></h2>
+    <p class="note" id="gloss-a"></p>
+    <div class="gloss" id="glosslegend"></div>
+  </section>
+
+  <section class="card">
     <p class="kicker" data-i18n="chart_kicker"></p>
     <h2 data-i18n="chart_title" style="margin-bottom:16px"></h2>
     <div class="controls">
@@ -248,7 +256,7 @@
         <span class="lab" data-i18n="quick"></span>
         <div class="presets" id="presets"></div>
       </div>
-      <div class="field">
+      <div class="field" style="position:relative;left:14px;top:9px">
         <span class="lab" data-i18n="view"></span>
         <div class="seg" id="mode" role="group" aria-label="Chart view">
           <button data-mode="level" class="active" aria-pressed="true" data-i18n="view_level"></button>
@@ -278,13 +286,6 @@
         <p class="caption" id="sidenote" style="margin-top:14px"></p>
       </aside>
     </div>
-  </section>
-
-  <section class="card">
-    <p class="kicker" data-i18n="gloss_kicker"></p>
-    <h2 id="gloss-q"></h2>
-    <p class="note" id="gloss-a" style="max-width:78ch"></p>
-    <div class="gloss" id="glosslegend"></div>
   </section>
 
   <section class="card">
@@ -343,13 +344,13 @@ const I18N={
     cite:"Como citar: Braga, Otávio. <em>IIVR-SP — Índice Imobiliário de Vendas Repetidas de São Paulo.</em> Dados e documentos sob licença CC BY 4.0.",
     disc:"Iniciativa em andamento, de caráter informativo. Erros são possíveis; os dados são uma versão tratada da fonte original e podem conter imprecisões. Não me responsabilizo pelo uso das informações — utilize a seu próprio critério.",
     about:[
-      "Boa parte do que se diz sobre o mercado imobiliário brasileiro vem de percepção, não de dados. Montei este índice para ajudar a mudar isso. A partir dos microdados de ITBI da <a href='"+SRC_URL+"' target='_blank' rel='noopener'>Prefeitura de São Paulo</a> — vendas efetivamente reportadas, não anúncios — construí um índice de vendas repetidas (método Case-Shiller) que, até onde sei, é o primeiro público para São Paulo.",
+      "Esta iniciativa tem como objetivo tornar o debate sobre o mercado imobiliário brasileiro muito mais baseado em dados — e este é meu pequeno passo nessa direção. A partir dos microdados de ITBI da <a href='"+SRC_URL+"' target='_blank' rel='noopener'>Prefeitura de São Paulo</a> — vendas efetivamente reportadas, não anúncios — construí um índice de vendas repetidas (método Case-Shiller) que, até onde sei, é o primeiro público para São Paulo.",
       "Em geral o índice e o FipeZAP caminham juntos, mas em alguns períodos os preços de venda descolam bastante dos de anúncio. Explore o gráfico abaixo e compare com inflação, CDI e Ibovespa. Deixei os dados tratados para download ao final da página."
     ]
   },
   en:{
     eyebrow:"House prices · São Paulo",
-    title:"IIVR-SP — São Paulo Repeat-Sales Index",
+    title:"IIVR-SP — São Paulo Repeat-Sales Housing Index",
     subtitle:"A repeat-sales house price index (Case-Shiller method), built from actual São Paulo property transactions.",
     byline:"by <a href='https://otaviolmbraga.github.io/' target='_blank' rel='noopener'>Otávio Braga</a> · 2010–2025",
     dh_kicker:"Open data",
@@ -377,10 +378,10 @@ const I18N={
     },
     dl_kicker:"Download", dl_title:"Data & documents",
     dl_note:"The transaction microdata are large and provided as a compressed download only.",
-    cite:"How to cite: Braga, Otávio. <em>IIVR-SP — São Paulo Repeat-Sales House Price Index.</em> Data and documents under CC BY 4.0.",
+    cite:"How to cite: Braga, Otávio. <em>IIVR-SP — São Paulo Repeat-Sales Housing Index.</em> Data and documents under CC BY 4.0.",
     disc:"An ongoing, informational initiative. Errors are possible; the data are a cleaned version of the original source and may contain inaccuracies. I take no responsibility for how the information is used — use at your own discretion.",
     about:[
-      "Most of what gets said about Brazil's housing market comes from gut feeling rather than data. I built this index to help change that. Starting from the <a href='"+SRC_URL+"' target='_blank' rel='noopener'>City of São Paulo</a>'s ITBI transfer-tax microdata — actual reported sales, not listings — I construct a repeat-sales index (Case-Shiller method) that, to my knowledge, is the first public one for São Paulo.",
+      "This initiative aims to make the debate about Brazil's housing market far more data-driven — and this is my one small step in that direction. Starting from the <a href='"+SRC_URL+"' target='_blank' rel='noopener'>City of São Paulo</a>'s ITBI transfer-tax microdata — actual reported sales, not listings — I build a repeat-sales index (Case-Shiller method) that, to my knowledge, is the first public one for São Paulo.",
       "The index and FipeZAP usually move together, but in some periods sale prices pull away sharply from asking prices. Explore the chart below and compare it with inflation, the CDI and the Ibovespa. I've left the cleaned data available for download at the bottom of the page."
     ]
   }
@@ -490,6 +491,7 @@ function draw(){
   const keys=SERIES.filter(k=>ACTIVE.has(k));
   const real=MODE==="real", lvl=MODE==="level"||real;
   const valAt=(r,key)=> real ? (r.ipca? r[key]/r.ipca : null) : r[key];
+  const mob=window.innerWidth<=760;
   const annotations=[];
   const traces=keys.map(key=>{
     let x=[],y=[];
@@ -499,9 +501,9 @@ function draw(){
     }else{
       slice.forEach(r=>{ x.push(r.date+"-01"); const v=r[key+"_yoy"]; y.push(v==null?null:v*100); });
     }
-    for(let i=y.length-1;i>=0;i--){ if(y[i]!=null){
+    if(!mob){ for(let i=y.length-1;i>=0;i--){ if(y[i]!=null){
       annotations.push({x:x[i],y:y[i],text:LABELS[key],xanchor:"left",yanchor:"middle",xshift:7,showarrow:false,
-        font:{size:11,color:COLORS[key],family:"'Space Mono', monospace"}}); break; } }
+        font:{size:11,color:COLORS[key],family:"'Space Mono', monospace"}}); break; } } }
     return {x,y,name:LABELS[key],mode:"lines",type:"scatter",
       line:{color:COLORS[key],width:WIDTHS[key],shape:"linear"},
       hovertemplate:"%{y:.1f}"+(lvl?"":"%")+"<extra>"+LABELS[key]+"</extra>"};
@@ -513,13 +515,17 @@ function draw(){
     .map(b=>({type:"rect",xref:"x",yref:"paper",x0:b[0]<w0?w0:b[0],x1:b[1]>w1?w1:b[1],
       y0:0,y1:1,fillcolor:"rgba(122,46,34,.06)",line:{width:0},layer:"below"}));
   const layout={
-    margin:{l:48,r:66,t:12,b:34}, hovermode:"x unified",
+    margin: mob ? {l:40,r:12,t:8,b:30} : {l:48,r:66,t:12,b:34},
+    hovermode:"x unified",
     paper_bgcolor:"rgba(0,0,0,0)", plot_bgcolor:"rgba(0,0,0,0)",
-    font:{family:"'EB Garamond', Georgia, serif", color:"#34291d", size:14},
-    showlegend:false, annotations, shapes,
-    xaxis:{showgrid:false, tickformat:"%Y", dtick:"M12", tickfont:{color:"#8a7a5f"}, linecolor:"#cdbe9c"},
+    font:{family:"'EB Garamond', Georgia, serif", color:"#34291d", size:mob?12:14},
+    showlegend:mob, annotations, shapes,
+    legend: mob ? {orientation:"h", x:0, y:-0.16, xanchor:"left", yanchor:"top",
+                   font:{family:"'Space Mono', monospace", size:10, color:"#34291d"}} : {},
+    xaxis:{showgrid:false, tickformat:"%Y", dtick:mob?"M24":"M12",
+           tickangle:0, tickfont:{color:"#8a7a5f", size:mob?10:14}, linecolor:"#cdbe9c"},
     yaxis:{gridcolor:"#ded0ad", griddash:"dot", zeroline:MODE==="yoy", zerolinecolor:"#cdbe9c",
-           ticksuffix:MODE==="yoy"?"%":"", tickfont:{color:"#8a7a5f"}}
+           ticksuffix:MODE==="yoy"?"%":"", tickfont:{color:"#8a7a5f", size:mob?10:14}}
   };
   Plotly.react("chart",traces,layout,{responsive:true,displayModeBar:false});
 }
@@ -548,7 +554,7 @@ function drawGloss(){
   document.getElementById("gloss-q").textContent=t.gloss_q;
   document.getElementById("gloss-a").textContent=t.gloss_a;
   const box=document.getElementById("glosslegend"); box.innerHTML="";
-  SERIES.forEach(key=>{
+  SERIES.filter(k=>!OFF_BY_DEFAULT.has(k)).forEach(key=>{
     const c=document.createElement("div"); c.className="gcard"; c.style.setProperty("--c",COLORS[key]);
     c.innerHTML=`<div class="gname"><span class="dot"></span>${LABELS[key]}</div><div class="gdesc">${t.bench[key]}</div>`;
     box.appendChild(c);
@@ -609,6 +615,13 @@ document.getElementById("startY").addEventListener("change",render);
 document.getElementById("endY").addEventListener("change",render);
 document.getElementById("expBtn").addEventListener("click",()=>{
   Plotly.downloadImage("chart",{format:"png",width:1200,height:620,scale:2,filename:"ivr-sp"});
+});
+
+// re-draw when crossing the mobile breakpoint so annotations/legend/margins toggle
+let _wasMob=window.innerWidth<=760, _rt;
+window.addEventListener("resize",()=>{
+  clearTimeout(_rt);
+  _rt=setTimeout(()=>{ const m=window.innerWidth<=760; if(m!==_wasMob){ _wasMob=m; draw(); } },180);
 });
 
 fillYears();

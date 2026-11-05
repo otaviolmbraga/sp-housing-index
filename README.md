@@ -1,4 +1,4 @@
-# IIVR-SP — São Paulo Repeat-Sales Index
+# IIVR-SP — São Paulo Repeat-Sales Housing Index
 
 A repeat-sales house price index (Case-Shiller method) for the city of São Paulo,
 built from ITBI property-transfer-tax microdata and benchmarked against IPCA, CDI,
@@ -50,7 +50,7 @@ description of every column in the transaction microdata.
 
 ## How to cite
 
-> Braga, Otávio. *IIVR-SP — São Paulo Repeat-Sales House Price Index.*
+> Braga, Otávio. *IIVR-SP — São Paulo Repeat-Sales Housing Index.*
 > https://otaviolmbraga.github.io/sp-housing-index/
 
 Machine-readable metadata is in [`CITATION.cff`](CITATION.cff).
