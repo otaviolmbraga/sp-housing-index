@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+title: "IVR-SP — São Paulo Repeat-Sales House Price Index"
+message: "If you use this index or the accompanying data, please cite it as below."
+type: dataset
+authors:
+  - family-names: Braga
+    given-names: Otávio
+version: "1.0"
+date-released: "2026-11-05"
+url: "https://otaviolmbraga.github.io/sp-housing-index/"
+repository-code: "https://github.com/otaviolmbraga/sp-housing-index"
+license: CC-BY-4.0
+keywords:
+  - house prices
+  - repeat-sales index
+  - Case-Shiller
+  - São Paulo
+  - ITBI
+# doi: 10.5281/zenodo.XXXXXXX   # add once a Zenodo release is minted

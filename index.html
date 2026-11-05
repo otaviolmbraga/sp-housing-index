@@ -3,8 +3,53 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Índice Case-Shiller São Paulo</title>
-<meta name="description" content="Repeat-sales house price index for São Paulo, benchmarked against IPCA, CDI, FipeZAP and Ibovespa (2010-2025)." />
+<title>IVR-SP — Índice de Vendas Repetidas de São Paulo</title>
+<meta name="description" content="Repeat-sales house price index (Case-Shiller method) for São Paulo, benchmarked against IPCA, CDI, FipeZAP and the Ibovespa (2010–2025). Open data and documents." />
+<meta name="author" content="Otávio Braga" />
+<meta name="keywords" content="São Paulo house prices, repeat-sales index, Case-Shiller, IVR-SP, ITBI, real estate Brazil, housing index" />
+<meta name="robots" content="index,follow" />
+<link rel="canonical" href="https://otaviolmbraga.github.io/sp-housing-index/" />
+
+<!-- Favicon (inline SVG: oxblood tile + rising line) -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%237a2e22'/%3E%3Cpath d='M5 23 L13 16 L19 19 L27 8' fill='none' stroke='%23ece3cf' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+
+<!-- Open Graph / Twitter -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="IVR-SP" />
+<meta property="og:title" content="IVR-SP — São Paulo Repeat-Sales House Price Index" />
+<meta property="og:description" content="A Case-Shiller repeat-sales house price index for São Paulo (2010–2025), benchmarked against IPCA, CDI, FipeZAP and the Ibovespa. Open data." />
+<meta property="og:url" content="https://otaviolmbraga.github.io/sp-housing-index/" />
+<meta property="og:image" content="https://otaviolmbraga.github.io/sp-housing-index/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="IVR-SP — São Paulo Repeat-Sales House Price Index" />
+<meta name="twitter:description" content="A Case-Shiller repeat-sales house price index for São Paulo (2010–2025). Open data and documents." />
+<meta name="twitter:image" content="https://otaviolmbraga.github.io/sp-housing-index/og-image.png" />
+
+<!-- Structured data: schema.org/Dataset (Google Dataset Search) -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Dataset",
+  "name":"IVR-SP — São Paulo Repeat-Sales House Price Index",
+  "alternateName":"Índice de Vendas Repetidas de São Paulo",
+  "description":"A repeat-sales (Case-Shiller method) house price index for the city of São Paulo, built from ITBI property-transfer-tax microdata and benchmarked against IPCA, CDI, FipeZAP and the Ibovespa, 2010–2025.",
+  "url":"https://otaviolmbraga.github.io/sp-housing-index/",
+  "sameAs":"https://github.com/otaviolmbraga/sp-housing-index",
+  "keywords":["house prices","repeat-sales index","Case-Shiller","São Paulo","ITBI","real estate"],
+  "license":"https://creativecommons.org/licenses/by/4.0/",
+  "isAccessibleForFree":true,
+  "creator":{"@type":"Person","name":"Otávio Braga"},
+  "temporalCoverage":"2010-01/2025-12",
+  "spatialCoverage":{"@type":"Place","name":"São Paulo, Brazil"},
+  "distribution":[
+    {"@type":"DataDownload","name":"Index series (CSV)","encodingFormat":"text/csv","contentUrl":"https://otaviolmbraga.github.io/sp-housing-index/data/ivr_sp_index.csv"},
+    {"@type":"DataDownload","name":"Transaction microdata (gzip CSV)","encodingFormat":"application/gzip","contentUrl":"https://github.com/otaviolmbraga/sp-housing-index/releases/download/data-v1/itbi_compilado.csv.gz"}
+  ]
+}
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -19,6 +64,8 @@
     --shadow:0 1px 0 #fff8ea inset, 0 2px 10px rgba(80,60,30,.10);
   }
   *{box-sizing:border-box}
+  a:focus-visible,button:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
   html,body{margin:0;padding:0}
   body{
     font-family:"EB Garamond",Georgia,"Times New Roman",serif;
@@ -53,7 +100,6 @@
   .about p:last-child{margin-bottom:0}
   .about a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--rule)}
   .about a:hover{border-color:var(--accent)}
-  .about .drop::first-letter{font-family:"Playfair Display",serif;font-weight:800;font-size:3.1rem;line-height:.8;float:left;padding:6px 10px 2px 0;color:var(--accent)}
 
   /* controls */
   .controls{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-end;border-bottom:1px solid var(--rule-soft);padding-bottom:16px;margin-bottom:18px}
@@ -111,7 +157,23 @@
 
   /* disclaimer */
   .disclaimer{margin-top:22px;border-left:3px solid var(--accent);background:rgba(122,46,34,.05);padding:12px 18px;border-radius:0 3px 3px 0}
-  .disclaimer p{margin:0;color:var(--muted);font-size:.9rem;font-style:italic}
+  .disclaimer p{margin:0;color:var(--muted);font-size:.82rem;font-style:italic}
+
+  /* hero stats */
+  .hero{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:16px;margin-top:26px}
+  .stat{background:var(--card);border:1px solid var(--rule);border-top:3px solid var(--c,var(--accent));border-radius:4px;box-shadow:var(--shadow);padding:17px 19px}
+  .stat .num{font-family:"Playfair Display",serif;font-weight:800;font-size:2rem;line-height:1;letter-spacing:-.02em;color:var(--c,var(--accent))}
+  .stat .lab{font-family:"Space Mono",monospace;font-size:.63rem;letter-spacing:.13em;text-transform:uppercase;color:var(--ink);margin-top:9px}
+  .stat .sub{color:var(--muted);font-size:.82rem;font-style:italic;margin-top:3px}
+
+  /* range presets + export */
+  .presets{display:inline-flex;gap:6px;flex-wrap:wrap}
+  .presets button{border:1px solid var(--rule);background:var(--paper);border-radius:999px;padding:5px 12px;font-family:"Space Mono",monospace;font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);cursor:pointer}
+  .presets button:hover{border-color:var(--accent);color:var(--accent)}
+  .chart-foot{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .src{color:var(--muted);font-size:.78rem;font-style:italic;margin:6px 2px 0}
+  .exp{border:1px solid var(--rule);background:var(--paper);border-radius:2px;padding:5px 12px;font-family:"Space Mono",monospace;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);cursor:pointer}
+  .exp:hover{border-color:var(--accent);color:var(--accent)}
 
   footer{color:var(--muted);font-size:.9rem;font-style:italic;margin-top:30px;border-top:3px double var(--rule);padding-top:18px}
 
@@ -119,6 +181,7 @@
     h1{font-size:2rem}
     .plotgrid{grid-template-columns:1fr}
     .side{border-left:0;border-top:1px solid var(--rule-soft);padding-left:0;padding-top:16px;margin-top:4px}
+    .stat .num{font-size:1.7rem}
   }
 </style>
 </head>
@@ -131,11 +194,13 @@
       <h1 data-i18n="title"></h1>
       <p class="sub" data-i18n="subtitle"></p>
     </div>
-    <div class="lang" role="group" aria-label="language">
-      <button id="lang-pt" class="active" onclick="setLang('pt')">Português</button>
-      <button id="lang-en" onclick="setLang('en')">English</button>
+    <div class="lang" role="group" aria-label="Language / Idioma">
+      <button id="lang-pt" class="active" aria-pressed="true" onclick="setLang('pt')">Português</button>
+      <button id="lang-en" aria-pressed="false" onclick="setLang('en')">English</button>
     </div>
   </header>
+
+  <section class="hero" id="hero"></section>
 
   <section class="card about">
     <div class="about-body" id="aboutBody"></div>
@@ -146,16 +211,21 @@
       <div class="field">
         <span class="lab" data-i18n="period"></span>
         <div class="years">
-          <select id="startY"></select>
-          <span class="dash">—</span>
-          <select id="endY"></select>
+          <select id="startY" aria-label="Start year"></select>
+          <span class="dash" aria-hidden="true">—</span>
+          <select id="endY" aria-label="End year"></select>
         </div>
       </div>
       <div class="field">
+        <span class="lab" data-i18n="quick"></span>
+        <div class="presets" id="presets"></div>
+      </div>
+      <div class="field">
         <span class="lab" data-i18n="view"></span>
-        <div class="seg" id="mode">
-          <button data-mode="level" class="active" data-i18n="view_level"></button>
-          <button data-mode="yoy" data-i18n="view_yoy"></button>
+        <div class="seg" id="mode" role="group" aria-label="Chart view">
+          <button data-mode="level" class="active" aria-pressed="true" data-i18n="view_level"></button>
+          <button data-mode="real" aria-pressed="false" data-i18n="view_real"></button>
+          <button data-mode="yoy" aria-pressed="false" data-i18n="view_yoy"></button>
         </div>
       </div>
       <div class="field" style="flex:1;min-width:260px">
@@ -166,13 +236,18 @@
 
     <div class="plotgrid">
       <div>
-        <div id="chart"></div>
-        <p class="caption" data-i18n="chart_caption"></p>
+        <div id="chart" role="img" aria-label="Interactive line chart comparing the IVR-SP house price index with IPCA, CDI, FipeZAP and the Ibovespa."></div>
+        <div class="chart-foot">
+          <p class="caption" data-i18n="chart_caption" style="flex:1"></p>
+          <button class="exp" id="expBtn" data-i18n="export"></button>
+        </div>
+        <p class="src" id="srcline"></p>
       </div>
       <aside class="side">
         <div class="win" id="winlabel"></div>
         <h3 data-i18n="side_title"></h3>
         <div class="retlist" id="retlist"></div>
+        <p class="caption" id="sidenote" style="margin-top:14px"></p>
       </aside>
     </div>
   </section>
@@ -189,6 +264,7 @@
     <h2 data-i18n="dl_title"></h2>
     <p class="note" data-i18n="dl_note"></p>
     <div class="dl" id="downloads"></div>
+    <p class="note" id="cite" style="margin-top:14px"></p>
   </section>
 
   <section class="disclaimer"><p id="disc"></p></section>
@@ -202,7 +278,7 @@ const COLORS={cs_sp:"#7a2e22",ipca:"#a6791f",cdi:"#4f6b4a",fipezap:"#6a4b62",ibo
 const WIDTHS={cs_sp:3.6,ipca:1.4,cdi:1.4,fipezap:1.4,ibovespa:1.3};
 const SERIES=(window.CS_DATA&&window.CS_DATA.series)||["cs_sp","ipca","cdi","fipezap","ibovespa"];
 const ROWS=(window.CS_DATA&&window.CS_DATA.rows)||[];
-const LABELS={cs_sp:"Case-Shiller",ipca:"IPCA",cdi:"CDI",fipezap:"FipeZAP",ibovespa:"Ibovespa"};
+const LABELS={cs_sp:"IVR-SP",ipca:"IPCA",cdi:"CDI",fipezap:"FipeZAP",ibovespa:"Ibovespa"};
 
 const SRC_URL="https://prefeitura.sp.gov.br/web/fazenda/w/acesso_a_informacao/31501";
 
@@ -210,16 +286,21 @@ const SRC_URL="https://prefeitura.sp.gov.br/web/fazenda/w/acesso_a_informacao/31
 const I18N={
   pt:{
     eyebrow:"Preços de imóveis · São Paulo",
-    title:"Índice Case-Shiller — São Paulo",
-    subtitle:"Índice de preços de imóveis por vendas repetidas, comparado a IPCA, CDI, FipeZAP e Ibovespa (2010–2025).",
-    period:"Período", view:"Visualização", indices:"Índices",
-    view_level:"Nível (base 100)", view_yoy:"Variação 12m",
+    title:"IVR-SP — Índice de Vendas Repetidas de São Paulo",
+    subtitle:"Índice de preços de imóveis por vendas repetidas (método Case-Shiller), comparado a IPCA, CDI, FipeZAP e Ibovespa (2010–2025).",
+    period:"Período", quick:"Atalhos", view:"Visualização", indices:"Índices",
+    view_level:"Nominal", view_real:"Real (IPCA)", view_yoy:"Variação 12m",
     chart_caption:"Séries reindexadas a 100 no início do período. Passe o mouse para ler os valores.",
+    chart_caption_real:"Em termos reais: cada série deflacionada pelo IPCA e reindexada a 100. O IPCA aparece achatado.",
     chart_caption_yoy:"Variação percentual em 12 meses. Passe o mouse para ler os valores.",
-    side_title:"Retorno acumulado", side_ann:"a.a.",
+    export:"Baixar PNG",
+    src_line:"Fonte: microdados do ITBI, Prefeitura de São Paulo. Elaboração própria.",
+    hero:{nom:"Valorização nominal — IVR-SP", real:"Em termos reais (IPCA)", real_sub:"descontada a inflação", cdi:"CDI acumulado", fipe:"FipeZAP (anúncios)"},
+    presets:{full:"Tudo", p15:"15 anos", p10:"10 anos", p5:"5 anos"},
+    side_title:"Variação acumulada", side_ann:"a.a.", side_note:"Índice e FipeZAP: só preço, sem aluguel; CDI e Ibovespa incluem rendimentos.",
     gloss_kicker:"Entenda os índices",
-    gloss_q:"O que é o Case-Shiller?",
-    gloss_a:"É um índice de preços de imóveis construído pelo método de vendas repetidas: acompanha o mesmo imóvel entre duas vendas, isolando a valorização de preço da mudança na composição e na qualidade do que é negociado. É o padrão adotado nos EUA (S&P CoreLogic Case-Shiller) e, aqui, aplicado pela primeira vez a dados de São Paulo.",
+    gloss_q:"O que é o IVR-SP?",
+    gloss_a:"O IVR-SP é um índice de preços de imóveis construído pelo método de vendas repetidas (Case-Shiller): acompanha o mesmo imóvel entre duas vendas, isolando a valorização de preço da mudança na composição e na qualidade do que é negociado. É o padrão adotado nos EUA (S&P CoreLogic Case-Shiller) e, aqui, aplicado a transações efetivas de São Paulo.",
     bench:{
       cs_sp:"Preço de venda de imóveis (vendas repetidas).",
       ipca:"Inflação oficial ao consumidor (IBGE).",
@@ -229,26 +310,32 @@ const I18N={
     },
     dl_kicker:"Download", dl_title:"Dados e documentos",
     dl_note:"Os microdados de transações são grandes e disponibilizados apenas para download (compactados).",
+    cite:"Como citar: Braga, Otávio. <em>IVR-SP — Índice de Vendas Repetidas de São Paulo.</em> Dados e documentos sob licença CC BY 4.0.",
     disc:"Iniciativa em andamento, de caráter informativo. Erros são possíveis; os dados são uma versão tratada da fonte original e podem conter imprecisões. Não me responsabilizo pelo uso das informações — utilize a seu próprio critério.",
     footer:"Índice construído a partir de microdados do ITBI da cidade de São Paulo, pela metodologia de vendas repetidas (Case-Shiller).",
     about:[
       "Análises sobre o mercado imobiliário brasileiro costumam se basear em percepção, com pouca evidência empírica. Isso vem mudando, e esta é uma iniciativa nessa direção.",
-      "Reúno aqui uma versão tratada dos dados de ITBI divulgados pela <a href='"+SRC_URL+"' target='_blank' rel='noopener'>Prefeitura de São Paulo</a>, junto com a construção do primeiro índice de vendas repetidas elaborado com dados brasileiros. Diferentemente de índices baseados em anúncios, como o FipeZAP, os dados da Prefeitura representam vendas efetivamente reportadas nas guias de ITBI — ou seja, transações de mercado, não ofertas.",
-      "Em geral os índices caminham juntos, mas há períodos em que a dinâmica dos preços de venda difere bastante da dos anúncios. Explore o gráfico interativo abaixo, compare com inflação, CDI e muito mais. Ao final da página, a versão tratada dos dados está disponível para download — para acadêmicos e curiosos."
+      "Reúno aqui uma versão tratada dos dados de ITBI divulgados pela <a href='"+SRC_URL+"' target='_blank' rel='noopener'>Prefeitura de São Paulo</a>, junto com a construção de um índice de vendas repetidas (método Case-Shiller) a partir de transações efetivas — até onde sabemos, o primeiro disponível publicamente para São Paulo. Diferentemente de índices baseados em anúncios, como o FipeZAP, os dados da Prefeitura representam vendas efetivamente reportadas nas guias de ITBI — ou seja, transações de mercado, não ofertas.",
+      "Em geral o índice de transações e o FipeZAP caminham juntos, mas há períodos em que a dinâmica dos preços de venda difere bastante da dos anúncios. Explore o gráfico interativo abaixo, compare com inflação, CDI e Ibovespa. Ao final da página, a versão tratada dos dados está disponível para download — para acadêmicos e curiosos."
     ]
   },
   en:{
     eyebrow:"House prices · São Paulo",
-    title:"Case-Shiller Index — São Paulo",
-    subtitle:"Repeat-sales house price index, benchmarked against IPCA, CDI, FipeZAP and the Ibovespa (2010–2025).",
-    period:"Period", view:"View", indices:"Indices",
-    view_level:"Level (base 100)", view_yoy:"Year-over-year",
+    title:"IVR-SP — São Paulo Repeat-Sales Index",
+    subtitle:"Repeat-sales house price index (Case-Shiller method), benchmarked against IPCA, CDI, FipeZAP and the Ibovespa (2010–2025).",
+    period:"Period", quick:"Presets", view:"View", indices:"Indices",
+    view_level:"Nominal", view_real:"Real (IPCA)", view_yoy:"Year-over-year",
     chart_caption:"Series rebased to 100 at the start of the period. Hover to read values.",
+    chart_caption_real:"In real terms: each series deflated by IPCA and rebased to 100. IPCA appears flat.",
     chart_caption_yoy:"Percent change over twelve months. Hover to read values.",
-    side_title:"Cumulative return", side_ann:"p.a.",
+    export:"Download PNG",
+    src_line:"Source: ITBI microdata, City of São Paulo. Author's calculations.",
+    hero:{nom:"Nominal appreciation — IVR-SP", real:"In real terms (IPCA)", real_sub:"inflation-adjusted", cdi:"CDI cumulative", fipe:"FipeZAP (listings)"},
+    presets:{full:"All", p15:"15 years", p10:"10 years", p5:"5 years"},
+    side_title:"Cumulative change", side_ann:"p.a.", side_note:"Index and FipeZAP: price only, excluding rent; CDI and Ibovespa include income.",
     gloss_kicker:"Understanding the indices",
-    gloss_q:"What is the Case-Shiller index?",
-    gloss_a:"A house price index built with the repeat-sales method: it tracks the same property across two sales, separating genuine price appreciation from changes in the mix and quality of what is traded. It is the standard approach in the U.S. (S&P CoreLogic Case-Shiller), applied here for the first time to São Paulo data.",
+    gloss_q:"What is the IVR-SP?",
+    gloss_a:"The IVR-SP is a house price index built with the repeat-sales (Case-Shiller) method: it tracks the same property across two sales, separating genuine price appreciation from changes in the mix and quality of what is traded. It is the standard approach in the U.S. (S&P CoreLogic Case-Shiller), applied here to actual São Paulo transactions.",
     bench:{
       cs_sp:"House sale prices (repeat sales).",
       ipca:"Official consumer price inflation (IBGE).",
@@ -258,12 +345,13 @@ const I18N={
     },
     dl_kicker:"Download", dl_title:"Data & documents",
     dl_note:"The transaction microdata are large and provided as a compressed download only.",
+    cite:"How to cite: Braga, Otávio. <em>IVR-SP — São Paulo Repeat-Sales House Price Index.</em> Data and documents under CC BY 4.0.",
     disc:"An ongoing, informational initiative. Errors are possible; the data are a cleaned version of the original source and may contain inaccuracies. I take no responsibility for how the information is used — use at your own discretion.",
     footer:"Index built from São Paulo property-transfer-tax (ITBI) microdata using the repeat-sales (Case-Shiller) methodology.",
     about:[
       "Analysis of the Brazilian housing market often rests on gut feeling, with little empirical evidence. That has been changing, and this is one step in that direction.",
-      "Here I bring together a cleaned version of the ITBI transfer-tax data released by the <a href='"+SRC_URL+"' target='_blank' rel='noopener'>City of São Paulo</a>, together with the first repeat-sales house price index built from Brazilian data. Unlike listing-based indices such as FipeZAP, the City's data record sales actually reported on ITBI tax forms — that is, market transactions, not asking prices.",
-      "The two usually move together, but in some periods the dynamics of sale prices depart sharply from those of listings. Explore the interactive chart below, compare it with inflation, the CDI and more. At the bottom of the page, the cleaned data are available for download — for academics and the curious alike."
+      "Here I bring together a cleaned version of the ITBI transfer-tax data released by the <a href='"+SRC_URL+"' target='_blank' rel='noopener'>City of São Paulo</a>, together with a repeat-sales house price index (Case-Shiller method) built from actual transactions — to our knowledge, the first publicly available one for São Paulo. Unlike listing-based indices such as FipeZAP, the City's data record sales actually reported on ITBI tax forms — that is, market transactions, not asking prices.",
+      "The transaction index and FipeZAP usually move together, but in some periods the dynamics of sale prices depart sharply from those of listings. Explore the interactive chart below, compare it with inflation, the CDI and the Ibovespa. At the bottom of the page, the cleaned data are available for download — for academics and the curious alike."
     ]
   }
 };
@@ -274,9 +362,15 @@ const DOWNLOADS=[
   {kind:"data", url:RELEASE_URL, size:"192 MB (.csv.gz)",
    t_pt:"Microdados de transações (ITBI)", d_pt:"CSV compactado com as transações usadas para construir o índice.",
    t_en:"Transaction microdata (ITBI)",   d_en:"Compressed CSV of the transactions used to build the index."},
+  {kind:"data", url:"data/ivr_sp_index.csv", size:"CSV",
+   t_pt:"Série do índice (IVR-SP)", d_pt:"Níveis mensais e variação em 12m do IVR-SP e dos comparativos (2010–2025).",
+   t_en:"Index series (IVR-SP)",   d_en:"Monthly levels and 12-month change for the IVR-SP and benchmarks (2010–2025)."},
+  {kind:"pdf", url:"docs/data_dictionary.md", size:"MD",
+   t_pt:"Dicionário de dados", d_pt:"Descrição (PT/EN) de cada coluna dos microdados de transações.",
+   t_en:"Data dictionary",    d_en:"Bilingual (EN/PT) description of every column in the transaction microdata."},
   {kind:"pdf", url:"docs/paper_housing_returns_sp_en.pdf", size:"PDF",
-   t_pt:"Comentários (inglês)", d_pt:"Discussão dos resultados e do mercado imobiliário de São Paulo.",
-   t_en:"Comments (English)",  d_en:"Discussion of the results and the São Paulo housing market."},
+   t_pt:"Comentários (em inglês)", d_pt:"Discussão dos resultados e do mercado imobiliário de São Paulo.",
+   t_en:"Comments",  d_en:"Discussion of the results and the São Paulo housing market."},
   {kind:"pdf", url:"docs/methodology_note_RB.pdf", size:"PDF",
    t_pt:"Nota metodológica", d_pt:"Como o índice de vendas repetidas é estimado.",
    t_en:"Methodology note", d_en:"How the repeat-sales index is estimated."}
@@ -288,7 +382,9 @@ const ACTIVE=new Set(SERIES);
 const months=ROWS.map(r=>r.date);
 const years=[...new Set(months.map(m=>m.slice(0,4)))];
 
-function pct(x){ return (x>=0?"+":"")+(x*100).toFixed(1)+"%"; }
+function nloc(){ return LANG==="pt"?"pt-BR":"en-US"; }
+function pct(x){ return (x>=0?"+":"")+(x*100).toLocaleString(nloc(),{minimumFractionDigits:1,maximumFractionDigits:1})+"%"; }
+function pct0(x){ return (x>=0?"+":"")+(x*100).toLocaleString(nloc(),{maximumFractionDigits:0})+"%"; }
 function monthsOfYear(y){ return months.filter(m=>m.slice(0,4)===y); }
 function windowIdx(){
   let sy=document.getElementById("startY").value, ey=document.getElementById("endY").value;
@@ -314,10 +410,45 @@ function buildSeriesPills(){
     const on=ACTIVE.has(key);
     const b=document.createElement("button");
     b.className="pill "+(on?"on":"off"); b.style.setProperty("--c",COLORS[key]);
-    b.innerHTML=`<span class="dot"></span>${LABELS[key]}`;
+    b.setAttribute("aria-pressed",String(on)); b.setAttribute("aria-label",LABELS[key]);
+    b.innerHTML=`<span class="dot" aria-hidden="true"></span>${LABELS[key]}`;
     b.onclick=()=>{ if(ACTIVE.has(key)) ACTIVE.delete(key); else ACTIVE.add(key); buildSeriesPills(); render(); };
     box.appendChild(b);
   });
+}
+
+// ---- hero stats (full period, auto-computed) ---------------------------------
+function drawHero(){
+  const t=I18N[LANG], a=ROWS[0], b=ROWS[ROWS.length-1];
+  const span=a.date.slice(0,4)+"–"+b.date.slice(0,4);
+  const nom=b.cs_sp/a.cs_sp-1;
+  const real=(b.cs_sp/b.ipca)/(a.cs_sp/a.ipca)-1;
+  const cdi=b.cdi/a.cdi-1;
+  const fipe=(a.fipezap&&b.fipezap)?b.fipezap/a.fipezap-1:null;
+  const cards=[
+    {c:COLORS.cs_sp, num:pct0(nom),  lab:t.hero.nom,  sub:span},
+    {c:COLORS.cs_sp, num:pct0(real), lab:t.hero.real, sub:t.hero.real_sub},
+    {c:COLORS.cdi,   num:pct0(cdi),  lab:t.hero.cdi,  sub:span},
+    {c:COLORS.fipezap, num:fipe==null?"—":pct0(fipe), lab:t.hero.fipe, sub:span}
+  ];
+  document.getElementById("hero").innerHTML=cards.map(c=>
+    `<div class="stat" style="--c:${c.c}"><div class="num">${c.num}</div><div class="lab">${c.lab}</div><div class="sub">${c.sub}</div></div>`).join("");
+}
+
+// ---- range presets -----------------------------------------------------------
+function drawPresets(){
+  const t=I18N[LANG], box=document.getElementById("presets"); box.innerHTML="";
+  [["full",t.presets.full],["p15",t.presets.p15],["p10",t.presets.p10],["p5",t.presets.p5]].forEach(([k,label])=>{
+    const b=document.createElement("button"); b.textContent=label; b.onclick=()=>setPreset(k); box.appendChild(b);
+  });
+}
+function setPreset(k){
+  const last=+years[years.length-1], first=+years[0];
+  let sy={full:first,p15:last-15,p10:last-10,p5:last-5}[k];
+  if(sy<first) sy=first;
+  document.getElementById("startY").value=String(sy);
+  document.getElementById("endY").value=String(last);
+  render();
 }
 
 // ---- chart -------------------------------------------------------------------
@@ -325,23 +456,35 @@ function draw(){
   const {lo,hi}=windowIdx();
   const slice=ROWS.slice(lo,hi+1);
   const keys=SERIES.filter(k=>ACTIVE.has(k));
+  const real=MODE==="real", lvl=MODE==="level"||real;
+  const valAt=(r,key)=> real ? (r.ipca? r[key]/r.ipca : null) : r[key];
+  const annotations=[];
   const traces=keys.map(key=>{
     let x=[],y=[];
-    if(MODE==="level"){
-      const base=ROWS[lo][key];
-      slice.forEach(r=>{ x.push(r.date+"-01"); y.push(base?(r[key]/base*100):null); });
+    if(lvl){
+      const base=valAt(ROWS[lo],key);
+      slice.forEach(r=>{ const v=valAt(r,key); x.push(r.date+"-01"); y.push(base&&v!=null?v/base*100:null); });
     }else{
       slice.forEach(r=>{ x.push(r.date+"-01"); const v=r[key+"_yoy"]; y.push(v==null?null:v*100); });
     }
+    for(let i=y.length-1;i>=0;i--){ if(y[i]!=null){
+      annotations.push({x:x[i],y:y[i],text:LABELS[key],xanchor:"left",yanchor:"middle",xshift:7,showarrow:false,
+        font:{size:11,color:COLORS[key],family:"'Space Mono', monospace"}}); break; } }
     return {x,y,name:LABELS[key],mode:"lines",type:"scatter",
-      line:{color:COLORS[key],width:WIDTHS[key],shape:"spline",smoothing:0.4},
-      hovertemplate:"%{y:.1f}"+(MODE==="level"?"":"%")+"<extra>"+LABELS[key]+"</extra>"};
+      line:{color:COLORS[key],width:WIDTHS[key],shape:"linear"},
+      hovertemplate:"%{y:.1f}"+(lvl?"":"%")+"<extra>"+LABELS[key]+"</extra>"};
   });
+  // recession shading (Brazil 2014-2016; COVID 2020), clipped to the window
+  const w0=months[lo]+"-01", w1=months[hi]+"-01";
+  const shapes=[["2014-04-01","2016-12-01"],["2020-02-01","2020-05-01"]]
+    .filter(b=>b[1]>=w0&&b[0]<=w1)
+    .map(b=>({type:"rect",xref:"x",yref:"paper",x0:b[0]<w0?w0:b[0],x1:b[1]>w1?w1:b[1],
+      y0:0,y1:1,fillcolor:"rgba(122,46,34,.06)",line:{width:0},layer:"below"}));
   const layout={
-    margin:{l:48,r:12,t:12,b:34}, hovermode:"x unified",
+    margin:{l:48,r:66,t:12,b:34}, hovermode:"x unified",
     paper_bgcolor:"rgba(0,0,0,0)", plot_bgcolor:"rgba(0,0,0,0)",
     font:{family:"'EB Garamond', Georgia, serif", color:"#34291d", size:14},
-    showlegend:false,
+    showlegend:false, annotations, shapes,
     xaxis:{showgrid:false, tickformat:"%Y", dtick:"M12", tickfont:{color:"#8a7a5f"}, linecolor:"#cdbe9c"},
     yaxis:{gridcolor:"#ded0ad", griddash:"dot", zeroline:MODE==="yoy", zerolinecolor:"#cdbe9c",
            ticksuffix:MODE==="yoy"?"%":"", tickfont:{color:"#8a7a5f"}}
@@ -385,7 +528,7 @@ function drawDownloads(){
   const box=document.getElementById("downloads"); box.innerHTML="";
   DOWNLOADS.forEach(d=>{
     const a=document.createElement("a"); a.href=d.url; if(d.kind==="data") a.setAttribute("download","");
-    const icon=d.kind==="pdf"?"❧":"⬇";
+    const icon=d.kind==="pdf"?"↓":"↓";
     a.innerHTML=`<div class="t">${icon} ${LANG==="pt"?d.t_pt:d.t_en}<span class="sz">${d.size}</span></div>`+
                 `<div class="d">${LANG==="pt"?d.d_pt:d.d_en}</div>`;
     box.appendChild(a);
@@ -396,7 +539,7 @@ function drawDownloads(){
 function drawAbout(){
   const t=I18N[LANG];
   const body=document.getElementById("aboutBody");
-  body.innerHTML = t.about.map((p,i)=>`<p${i===0?' class="drop"':''}>${p}</p>`).join("");
+  body.innerHTML = t.about.map(p=>`<p>${p}</p>`).join("");
 }
 function applyI18n(){
   const t=I18N[LANG]; document.documentElement.lang=LANG;
@@ -404,15 +547,20 @@ function applyI18n(){
     const k=el.getAttribute("data-i18n"); if(t[k]!=null) el.textContent=t[k];
   });
   const cap=document.querySelector('[data-i18n="chart_caption"]');
-  if(cap) cap.textContent=MODE==="yoy"?t.chart_caption_yoy:t.chart_caption;
+  if(cap) cap.textContent = MODE==="yoy" ? t.chart_caption_yoy : (MODE==="real" ? t.chart_caption_real : t.chart_caption);
   document.getElementById("disc").textContent=t.disc;
+  document.getElementById("sidenote").textContent=t.side_note;
+  document.getElementById("srcline").textContent=t.src_line;
+  document.getElementById("cite").innerHTML=t.cite;
   document.title=t.title;
 }
 function setLang(l){
   LANG=l;
   document.getElementById("lang-pt").classList.toggle("active",l==="pt");
   document.getElementById("lang-en").classList.toggle("active",l==="en");
-  applyI18n(); drawAbout(); drawGloss(); drawDownloads(); drawReturns();
+  document.getElementById("lang-pt").setAttribute("aria-pressed",String(l==="pt"));
+  document.getElementById("lang-en").setAttribute("aria-pressed",String(l==="en"));
+  applyI18n(); drawHero(); drawPresets(); drawAbout(); drawGloss(); drawDownloads(); drawReturns();
 }
 
 // ---- render ------------------------------------------------------------------
@@ -421,14 +569,19 @@ function render(){ applyI18n(); draw(); drawReturns(); }
 document.getElementById("mode").addEventListener("click",e=>{
   const b=e.target.closest("button[data-mode]"); if(!b) return;
   MODE=b.dataset.mode;
-  document.querySelectorAll("#mode button").forEach(x=>x.classList.toggle("active",x===b));
+  document.querySelectorAll("#mode button").forEach(x=>{const on=x===b;x.classList.toggle("active",on);x.setAttribute("aria-pressed",String(on));});
   render();
 });
 document.getElementById("startY").addEventListener("change",render);
 document.getElementById("endY").addEventListener("change",render);
+document.getElementById("expBtn").addEventListener("click",()=>{
+  Plotly.downloadImage("chart",{format:"png",width:1200,height:620,scale:2,filename:"ivr-sp"});
+});
 
 fillYears();
 buildSeriesPills();
+drawHero();
+drawPresets();
 applyI18n();
 drawAbout();
 drawGloss();

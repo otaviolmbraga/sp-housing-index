@@ -25,6 +25,7 @@ INDEX_CSV = SRC_DIR / "data" / "clean_data" / "cs_index_final.csv"
 ITBI_CSV = SRC_DIR / "data" / "clean_data" / "itbi_compilado.csv"
 
 DATA_JS = SITE_DIR / "data.js"
+INDEX_CSV_OUT = SITE_DIR / "data" / "ivr_sp_index.csv"
 REL_DIR = SITE_DIR / "_release_assets"
 ITBI_GZ = REL_DIR / "itbi_compilado.csv.gz"
 
@@ -51,6 +52,16 @@ def build_index_js():
     js += "window.CS_DATA = " + json.dumps(payload, separators=(",", ":")) + ";\n"
     DATA_JS.write_text(js, encoding="utf-8")
     print(f"wrote {DATA_JS}  ({DATA_JS.stat().st_size/1024:.1f} KB, {len(rows)} months)")
+
+    # committable copy of the index series (levels + 12m change) for direct download/citation
+    INDEX_CSV_OUT.parent.mkdir(parents=True, exist_ok=True)
+    cols = ["date"] + SERIES + YOY
+    with INDEX_CSV_OUT.open("w", newline="", encoding="utf-8") as out:
+        w = csv.writer(out)
+        w.writerow(cols)
+        for rec in rows:
+            w.writerow([rec[c] if rec.get(c) is not None else "" for c in cols])
+    print(f"wrote {INDEX_CSV_OUT}  ({len(rows)} months)")
 
 
 def build_itbi_gz():
