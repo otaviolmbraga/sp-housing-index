@@ -105,7 +105,7 @@
   .about a:hover{border-color:var(--accent)}
 
   /* controls */
-  .controls{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-end;border-bottom:1px solid var(--rule-soft);padding-bottom:16px;margin-bottom:18px}
+  .controls{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;border-bottom:1px solid var(--rule-soft);padding-bottom:16px;margin-bottom:18px}
   .field{display:flex;flex-direction:column;gap:6px}
   .field > span.lab{font-family:"Space Mono",monospace;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
   .years{display:flex;align-items:center;gap:8px}
@@ -193,6 +193,7 @@
 
   @media (max-width:760px){
     h1{font-size:2rem}
+    .controls{justify-content:flex-start}
     .plotgrid{grid-template-columns:1fr}
     #chart{height:380px}
     .side{border-left:0;border-top:1px solid var(--rule-soft);padding-left:0;padding-top:16px;margin-top:4px}
@@ -256,7 +257,7 @@
         <span class="lab" data-i18n="quick"></span>
         <div class="presets" id="presets"></div>
       </div>
-      <div class="field" style="position:relative;left:14px;top:9px">
+      <div class="field">
         <span class="lab" data-i18n="view"></span>
         <div class="seg" id="mode" role="group" aria-label="Chart view">
           <button data-mode="level" class="active" aria-pressed="true" data-i18n="view_level"></button>
@@ -264,7 +265,7 @@
           <button data-mode="yoy" aria-pressed="false" data-i18n="view_yoy"></button>
         </div>
       </div>
-      <div class="field" style="flex:1;min-width:260px">
+      <div class="field" style="min-width:260px">
         <span class="lab" data-i18n="indices"></span>
         <div class="series-row" id="series"></div>
       </div>
@@ -342,7 +343,7 @@ const I18N={
     dl_kicker:"Download", dl_title:"Dados e documentos",
     dl_note:"Os microdados de transações são grandes e disponibilizados apenas para download (compactados).",
     cite:"Como citar: Braga, Otávio. <em>IIVR-SP — Índice Imobiliário de Vendas Repetidas de São Paulo.</em> Dados e documentos sob licença CC BY 4.0.",
-    disc:"Iniciativa em andamento, de caráter informativo. Erros são possíveis; os dados são uma versão tratada da fonte original e podem conter imprecisões. Não me responsabilizo pelo uso das informações — utilize a seu próprio critério.",
+    disc:"Iniciativa em andamento, de caráter informativo. Erros são possíveis — os dados são uma versão tratada da fonte original e podem conter imprecisões.",
     about:[
       "Esta iniciativa tem como objetivo fomentar o debate sobre o mercado imobiliário brasileiro, promovendo mais informação e sofisticação nessa pauta. A partir dos microdados de ITBI da <a href='"+SRC_URL+"' target='_blank' rel='noopener'>Prefeitura de São Paulo</a> — vendas efetivamente reportadas, não anúncios — construí um índice de vendas repetidas (método Case-Shiller) que, até onde sei, é o primeiro público para São Paulo. Espero incentivar o uso mais amplo desses dados de transações, tanto em pesquisas acadêmicas quanto entre os players do mercado."
     ]
@@ -378,7 +379,7 @@ const I18N={
     dl_kicker:"Download", dl_title:"Data & documents",
     dl_note:"The transaction microdata are large and provided as a compressed download only.",
     cite:"How to cite: Braga, Otávio. <em>IIVR-SP — São Paulo Repeat-Sales Housing Index.</em> Data and documents under CC BY 4.0.",
-    disc:"An ongoing, informational initiative. Errors are possible; the data are a cleaned version of the original source and may contain inaccuracies. I take no responsibility for how the information is used — use at your own discretion.",
+    disc:"An ongoing, informational initiative. Errors are possible — the data are a cleaned version of the original source and may contain inaccuracies.",
     about:[
       "This initiative aims to make the debate about Brazil's housing market more data-driven. Starting from the <a href='"+SRC_URL+"' target='_blank' rel='noopener'>City of São Paulo</a>'s ITBI transfer-tax microdata — actual reported sales, not listings — I build a repeat-sales index (Case-Shiller method) that, to my knowledge, is the first public one for São Paulo. I hope it encourages broader use of such transaction data, both in academic research and among market participants."
     ]
