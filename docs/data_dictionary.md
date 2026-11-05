@@ -48,7 +48,7 @@ metres (m²).
 
 ## Notes
 
-- **Coverage / cobertura:** the file spans 2006–2025. The repeat-sales index (IVR-SP)
+- **Coverage / cobertura:** the file spans 2006–2025. The repeat-sales index (IIVR-SP)
   uses only the subset of properties (`sql`) observed in at least two transactions, with
   a minimum 3-year holding period between the two sales.
 - **Cleaning / tratamento:** this is a cleaned derivative of the original municipal
