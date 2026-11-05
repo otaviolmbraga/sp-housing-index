@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Índice Case-Shiller São Paulo</title>
+<meta name="description" content="Repeat-sales house price index for São Paulo, benchmarked against IPCA, CDI, FipeZAP and Ibovespa (2010-2025)." />
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+<style>
+  :root{
+    --bg:#f6f7f9; --card:#ffffff; --ink:#1b2430; --muted:#5d6b7a;
+    --line:#e6e9ee; --accent:#0b5394; --accent-soft:#eaf1f8;
+    --cs:#0b5394; --ipca:#d64545; --cdi:#3d8b4f; --fipezap:#7c5cbf; --ibov:#e0922a;
+    --shadow:0 1px 2px rgba(16,24,40,.06),0 4px 16px rgba(16,24,40,.06);
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1040px;margin:0 auto;padding:28px 20px 72px}
+  header.top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  h1{font-size:1.6rem;line-height:1.25;margin:0 0 4px}
+  .sub{color:var(--muted);font-size:.98rem;margin:0;max-width:62ch}
+  .lang{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--card);box-shadow:var(--shadow)}
+  .lang button{border:0;background:transparent;padding:7px 14px;font-size:.85rem;font-weight:600;color:var(--muted);cursor:pointer}
+  .lang button.active{background:var(--accent);color:#fff}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 18px 10px;margin-top:22px}
+  .controls{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end;margin-bottom:6px}
+  .field{display:flex;flex-direction:column;gap:5px}
+  .field label{font-size:.72rem;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  select{appearance:none;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 32px 8px 11px;font-size:.92rem;color:var(--ink);cursor:pointer;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235d6b7a' stroke-width='3'><path d='M6 9l6 6 6-6'/></svg>");
+    background-repeat:no-repeat;background-position:right 10px center}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .seg button{border:0;background:var(--card);padding:8px 14px;font-size:.88rem;font-weight:600;color:var(--muted);cursor:pointer}
+  .seg button.active{background:var(--accent-soft);color:var(--accent)}
+  #chart{width:100%;height:460px}
+  table.rt{width:100%;border-collapse:collapse;margin-top:4px;font-variant-numeric:tabular-nums}
+  table.rt th,table.rt td{padding:10px 12px;text-align:right;border-bottom:1px solid var(--line);font-size:.93rem}
+  table.rt th:first-child,table.rt td:first-child{text-align:left}
+  table.rt thead th{color:var(--muted);font-size:.74rem;letter-spacing:.03em;text-transform:uppercase;font-weight:700;border-bottom:2px solid var(--line)}
+  .swatch{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:8px;vertical-align:baseline}
+  .pos{color:#1f7a3d;font-weight:600}.neg{color:#c0392b;font-weight:600}
+  .caption{color:var(--muted);font-size:.85rem;margin:10px 2px 0}
+  .dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:4px}
+  .dl a{display:block;text-decoration:none;color:inherit;border:1px solid var(--line);border-radius:12px;padding:14px 16px;transition:border-color .15s,transform .15s}
+  .dl a:hover{border-color:var(--accent);transform:translateY(-1px)}
+  .dl .t{font-weight:700;font-size:.98rem;display:flex;align-items:center;gap:8px}
+  .dl .d{color:var(--muted);font-size:.84rem;margin-top:3px}
+  .dl .sz{display:inline-block;margin-left:auto;font-size:.74rem;color:var(--muted);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 9px}
+  h2{font-size:1.12rem;margin:0 0 2px}
+  .note{color:var(--muted);font-size:.84rem;margin:6px 2px 0}
+  footer{color:var(--muted);font-size:.82rem;margin-top:30px;border-top:1px solid var(--line);padding-top:16px}
+  a.link{color:var(--accent);text-decoration:none}a.link:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div>
+      <h1 data-i18n="title"></h1>
+      <p class="sub" data-i18n="subtitle"></p>
+    </div>
+    <div class="lang" role="group" aria-label="language">
+      <button id="lang-pt" class="active" onclick="setLang('pt')">PT</button>
+      <button id="lang-en" onclick="setLang('en')">EN</button>
+    </div>
+  </header>
+
+  <section class="card">
+    <div class="controls">
+      <div class="field">
+        <label data-i18n="from"></label>
+        <select id="start"></select>
+      </div>
+      <div class="field">
+        <label data-i18n="to"></label>
+        <select id="end"></select>
+      </div>
+      <div class="field">
+        <label data-i18n="view"></label>
+        <div class="seg" id="mode">
+          <button data-mode="level" class="active" data-i18n="view_level"></button>
+          <button data-mode="yoy" data-i18n="view_yoy"></button>
+        </div>
+      </div>
+    </div>
+    <div id="chart"></div>
+    <p class="caption" data-i18n="chart_caption"></p>
+  </section>
+
+  <section class="card">
+    <h2 data-i18n="table_title"></h2>
+    <p class="note" data-i18n="table_note"></p>
+    <table class="rt">
+      <thead>
+        <tr>
+          <th data-i18n="col_series"></th>
+          <th data-i18n="col_cum"></th>
+          <th data-i18n="col_ann"></th>
+        </tr>
+      </thead>
+      <tbody id="rtbody"></tbody>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2 data-i18n="dl_title"></h2>
+    <p class="note" data-i18n="dl_note"></p>
+    <div class="dl" id="downloads"></div>
+  </section>
+
+  <footer>
+    <span data-i18n="footer"></span>
+  </footer>
+</div>
+
+<script>
+// ---- series styling + labels -------------------------------------------------
+const COLORS = {cs_sp:"#0b5394", ipca:"#d64545", cdi:"#3d8b4f", fipezap:"#7c5cbf", ibovespa:"#e0922a"};
+const SERIES = (window.CS_DATA && window.CS_DATA.series) || ["cs_sp","ipca","cdi","fipezap","ibovespa"];
+const ROWS = (window.CS_DATA && window.CS_DATA.rows) || [];
+
+// ---- i18n --------------------------------------------------------------------
+const I18N = {
+  pt:{
+    title:"Índice Case-Shiller — São Paulo",
+    subtitle:"Índice de preços de imóveis por vendas repetidas para a cidade de São Paulo, comparado a IPCA, CDI, FipeZAP e Ibovespa (2010–2025).",
+    from:"De", to:"Até", view:"Visualização",
+    view_level:"Nível (base 100)", view_yoy:"Variação 12m",
+    chart_caption:"Todas as séries começam em 100 no mês inicial selecionado. Passe o mouse para ver os valores; clique na legenda para ocultar séries.",
+    table_title:"Retorno acumulado no período selecionado",
+    table_note:"Retorno total e retorno anualizado entre os dois meses escolhidos acima.",
+    col_series:"Série", col_cum:"Acumulado", col_ann:"Anualizado",
+    dl_title:"Dados e documentos", dl_note:"Os microdados de transações são grandes e disponibilizados apenas para download (compactados).",
+    footer:"Índice construído a partir de microdados do ITBI (Imposto sobre Transmissão de Bens Imóveis) da cidade de São Paulo. Metodologia de vendas repetidas (Case-Shiller).",
+    labels:{cs_sp:"Case-Shiller SP", ipca:"IPCA", cdi:"CDI", fipezap:"FipeZAP", ibovespa:"Ibovespa"}
+  },
+  en:{
+    title:"Case-Shiller Index — São Paulo",
+    subtitle:"Repeat-sales house price index for the city of São Paulo, benchmarked against IPCA, CDI, FipeZAP and the Ibovespa (2010–2025).",
+    from:"From", to:"To", view:"View",
+    view_level:"Level (base 100)", view_yoy:"Year-over-year",
+    chart_caption:"All series are rebased to 100 at the selected start month. Hover to read values; click the legend to hide series.",
+    table_title:"Cumulative return over the selected window",
+    table_note:"Total and annualized return between the two months chosen above.",
+    col_series:"Series", col_cum:"Cumulative", col_ann:"Annualized",
+    dl_title:"Data & documents", dl_note:"The transaction microdata are large and provided as a compressed download only.",
+    footer:"Index built from São Paulo property-transfer-tax (ITBI) microdata using the repeat-sales (Case-Shiller) methodology.",
+    labels:{cs_sp:"Case-Shiller SP", ipca:"IPCA", cdi:"CDI", fipezap:"FipeZAP", ibovespa:"Ibovespa"}
+  }
+};
+
+// ---- downloads (edit paths/URLs after you create the Release) ----------------
+// Replace RELEASE_URL with your GitHub Release asset link once uploaded.
+const RELEASE_URL = "RELEASE_URL_HERE";
+const DOWNLOADS = [
+  {kind:"data", url:RELEASE_URL, size:"192 MB (.csv.gz)",
+   t_pt:"Microdados de transações (ITBI)", d_pt:"CSV compactado com as transações usadas para construir o índice.",
+   t_en:"Transaction microdata (ITBI)",   d_en:"Compressed CSV of the transactions used to build the index."},
+  {kind:"pdf", url:"docs/paper_housing_returns_sp_en.pdf", size:"PDF",
+   t_pt:"Artigo (inglês)", d_pt:"Retornos de imóveis em São Paulo — versão completa.",
+   t_en:"Paper (English)", d_en:"Housing returns in São Paulo — full write-up."},
+  {kind:"pdf", url:"docs/methodology_note_RB.pdf", size:"PDF",
+   t_pt:"Nota metodológica", d_pt:"Como o índice de vendas repetidas é estimado.",
+   t_en:"Methodology note", d_en:"How the repeat-sales index is estimated."}
+];
+
+// ---- state -------------------------------------------------------------------
+let LANG = "pt";
+let MODE = "level";
+const months = ROWS.map(r => r.date);
+
+function fmtMonth(ym){
+  const [y,m] = ym.split("-");
+  const MON = {pt:["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"],
+               en:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]};
+  return MON[LANG][parseInt(m,10)-1] + " " + y;
+}
+function pct(x){ return (x>=0?"+":"") + (x*100).toFixed(1) + "%"; }
+
+// ---- populate month pickers --------------------------------------------------
+function fillPickers(){
+  const s = document.getElementById("start"), e = document.getElementById("end");
+  const prevS = s.value, prevE = e.value;
+  s.innerHTML = ""; e.innerHTML = "";
+  months.forEach(ym => {
+    const o1 = document.createElement("option"); o1.value = ym; o1.textContent = fmtMonth(ym); s.appendChild(o1);
+    const o2 = document.createElement("option"); o2.value = ym; o2.textContent = fmtMonth(ym); e.appendChild(o2);
+  });
+  s.value = prevS || months[0];
+  e.value = prevE || months[months.length-1];
+}
+
+// ---- chart -------------------------------------------------------------------
+function draw(){
+  const si = months.indexOf(document.getElementById("start").value);
+  const ei = months.indexOf(document.getElementById("end").value);
+  const lo = Math.min(si,ei), hi = Math.max(si,ei);
+  const window_ = ROWS.slice(lo, hi+1);
+  const L = I18N[LANG].labels;
+
+  const traces = SERIES.map(key => {
+    let x = [], y = [];
+    if(MODE === "level"){
+      const base = ROWS[lo][key];
+      window_.forEach(r => { x.push(r.date+"-01"); y.push(base ? (r[key]/base*100) : null); });
+    } else {
+      window_.forEach(r => { x.push(r.date+"-01"); const v=r[key+"_yoy"]; y.push(v==null?null:v*100); });
+    }
+    return {
+      x, y, name:L[key], mode:"lines", type:"scatter",
+      line:{color:COLORS[key], width: key==="cs_sp"?3.2:1.8},
+      hovertemplate:"%{y:.1f}"+(MODE==="level"?"":"%")+"<extra>"+L[key]+"</extra>"
+    };
+  });
+
+  const layout = {
+    margin:{l:52,r:16,t:10,b:40},
+    hovermode:"x unified",
+    paper_bgcolor:"rgba(0,0,0,0)", plot_bgcolor:"rgba(0,0,0,0)",
+    font:{family:"-apple-system,Segoe UI,Roboto,Arial,sans-serif", color:"#1b2430", size:13},
+    legend:{orientation:"h", y:-0.16, x:0, font:{size:12}},
+    xaxis:{showgrid:false, tickformat:"%b %Y", tickfont:{color:"#5d6b7a"}, linecolor:"#e6e9ee"},
+    yaxis:{gridcolor:"#eef1f5", zeroline:MODE==="yoy", zerolinecolor:"#d6dbe2",
+           ticksuffix: MODE==="yoy" ? "%" : "", tickfont:{color:"#5d6b7a"}},
+  };
+  Plotly.react("chart", traces, layout, {responsive:true, displayModeBar:true,
+    displaylogo:false, modeBarButtonsToRemove:["lasso2d","select2d","autoScale2d"]});
+}
+
+// ---- returns table -----------------------------------------------------------
+function drawTable(){
+  const si = months.indexOf(document.getElementById("start").value);
+  const ei = months.indexOf(document.getElementById("end").value);
+  const lo = Math.min(si,ei), hi = Math.max(si,ei);
+  const nmonths = hi - lo;
+  const L = I18N[LANG].labels;
+  const body = document.getElementById("rtbody");
+  body.innerHTML = "";
+  SERIES.forEach(key => {
+    const a = ROWS[lo][key], b = ROWS[hi][key];
+    let cum=null, ann=null;
+    if(a && b){ cum = b/a - 1; ann = nmonths>0 ? Math.pow(b/a, 12/nmonths)-1 : 0; }
+    const tr = document.createElement("tr");
+    const cumC = cum==null?"" : (cum>=0?"pos":"neg");
+    const annC = ann==null?"" : (ann>=0?"pos":"neg");
+    tr.innerHTML =
+      `<td><span class="swatch" style="background:${COLORS[key]}"></span>${L[key]}</td>`+
+      `<td class="${cumC}">${cum==null?"—":pct(cum)}</td>`+
+      `<td class="${annC}">${ann==null?"—":pct(ann)}</td>`;
+    body.appendChild(tr);
+  });
+}
+
+// ---- downloads ---------------------------------------------------------------
+function drawDownloads(){
+  const box = document.getElementById("downloads");
+  box.innerHTML = "";
+  DOWNLOADS.forEach(d => {
+    const a = document.createElement("a");
+    a.href = d.url; if(d.kind==="data") a.setAttribute("download","");
+    const icon = d.kind==="pdf" ? "📄" : "⬇";
+    a.innerHTML = `<div class="t">${icon} ${LANG==="pt"?d.t_pt:d.t_en}<span class="sz">${d.size}</span></div>`+
+                  `<div class="d">${LANG==="pt"?d.d_pt:d.d_en}</div>`;
+    box.appendChild(a);
+  });
+}
+
+// ---- i18n apply --------------------------------------------------------------
+function applyI18n(){
+  const t = I18N[LANG];
+  document.documentElement.lang = LANG;
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const k = el.getAttribute("data-i18n");
+    if(t[k] != null) el.textContent = t[k];
+  });
+  document.title = t.title;
+}
+function setLang(l){
+  LANG = l;
+  document.getElementById("lang-pt").classList.toggle("active", l==="pt");
+  document.getElementById("lang-en").classList.toggle("active", l==="en");
+  const sv=document.getElementById("start").value, ev=document.getElementById("end").value;
+  applyI18n(); fillPickers();
+  document.getElementById("start").value=sv; document.getElementById("end").value=ev;
+  draw(); drawTable(); drawDownloads();
+}
+
+// ---- wire up -----------------------------------------------------------------
+document.getElementById("mode").addEventListener("click", e => {
+  const b = e.target.closest("button[data-mode]"); if(!b) return;
+  MODE = b.dataset.mode;
+  document.querySelectorAll("#mode button").forEach(x => x.classList.toggle("active", x===b));
+  draw();
+});
+document.getElementById("start").addEventListener("change", () => { draw(); drawTable(); });
+document.getElementById("end").addEventListener("change", () => { draw(); drawTable(); });
+
+applyI18n();
+fillPickers();
+draw();
+drawTable();
+drawDownloads();
+</script>
+</body>
+</html>

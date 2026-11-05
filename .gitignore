@@ -1,0 +1,8 @@
+# Release assets are uploaded to GitHub Releases, NOT committed to the repo
+_release_assets/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.pyc
+__pycache__/
