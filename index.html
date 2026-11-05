@@ -5,58 +5,119 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Índice Case-Shiller São Paulo</title>
 <meta name="description" content="Repeat-sales house price index for São Paulo, benchmarked against IPCA, CDI, FipeZAP and Ibovespa (2010-2025)." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
 <script src="data.js"></script>
 <style>
   :root{
-    --bg:#f6f7f9; --card:#ffffff; --ink:#1b2430; --muted:#5d6b7a;
-    --line:#e6e9ee; --accent:#0b5394; --accent-soft:#eaf1f8;
-    --cs:#0b5394; --ipca:#d64545; --cdi:#3d8b4f; --fipezap:#7c5cbf; --ibov:#e0922a;
-    --shadow:0 1px 2px rgba(16,24,40,.06),0 4px 16px rgba(16,24,40,.06);
-    --radius:14px;
+    --paper:#ece3cf;          /* aged parchment */
+    --paper2:#e4d9bf;
+    --card:#f7f1e1;           /* lighter card */
+    --ink:#34291d;            /* dark coffee text */
+    --muted:#8a7a5f;          /* faded sepia */
+    --rule:#cdbe9c;           /* hairline */
+    --rule-soft:#ded0ad;
+    --accent:#7a2e22;         /* oxblood */
+    --accent-soft:#eaddc2;
+    /* vintage series palette */
+    --cs:#7a2e22; --ipca:#a6791f; --cdi:#4f6b4a; --fipezap:#6a4b62; --ibov:#3f6076;
+    --shadow:0 1px 0 #fff8ea inset, 0 2px 10px rgba(80,60,30,.10);
   }
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
   body{
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    background:var(--bg); color:var(--ink); line-height:1.5;
+    font-family:"EB Garamond",Georgia,"Times New Roman",serif;
+    color:var(--ink); line-height:1.55; font-size:17px;
+    background:
+      radial-gradient(1200px 600px at 20% -10%, #f3ecd9 0%, rgba(243,236,217,0) 60%),
+      radial-gradient(1000px 700px at 100% 0%, #e8ddc3 0%, rgba(232,221,195,0) 55%),
+      var(--paper);
     -webkit-font-smoothing:antialiased;
   }
-  .wrap{max-width:1040px;margin:0 auto;padding:28px 20px 72px}
-  header.top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
-  h1{font-size:1.6rem;line-height:1.25;margin:0 0 4px}
-  .sub{color:var(--muted);font-size:.98rem;margin:0;max-width:62ch}
-  .lang{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--card);box-shadow:var(--shadow)}
-  .lang button{border:0;background:transparent;padding:7px 14px;font-size:.85rem;font-weight:600;color:var(--muted);cursor:pointer}
-  .lang button.active{background:var(--accent);color:#fff}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 18px 10px;margin-top:22px}
-  .controls{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end;margin-bottom:6px}
-  .field{display:flex;flex-direction:column;gap:5px}
-  .field label{font-size:.72rem;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:700}
-  select{appearance:none;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 32px 8px 11px;font-size:.92rem;color:var(--ink);cursor:pointer;
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235d6b7a' stroke-width='3'><path d='M6 9l6 6 6-6'/></svg>");
-    background-repeat:no-repeat;background-position:right 10px center}
-  .seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
-  .seg button{border:0;background:var(--card);padding:8px 14px;font-size:.88rem;font-weight:600;color:var(--muted);cursor:pointer}
-  .seg button.active{background:var(--accent-soft);color:var(--accent)}
-  #chart{width:100%;height:460px}
-  table.rt{width:100%;border-collapse:collapse;margin-top:4px;font-variant-numeric:tabular-nums}
-  table.rt th,table.rt td{padding:10px 12px;text-align:right;border-bottom:1px solid var(--line);font-size:.93rem}
-  table.rt th:first-child,table.rt td:first-child{text-align:left}
-  table.rt thead th{color:var(--muted);font-size:.74rem;letter-spacing:.03em;text-transform:uppercase;font-weight:700;border-bottom:2px solid var(--line)}
-  .swatch{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:8px;vertical-align:baseline}
-  .pos{color:#1f7a3d;font-weight:600}.neg{color:#c0392b;font-weight:600}
-  .caption{color:var(--muted);font-size:.85rem;margin:10px 2px 0}
-  .dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:4px}
-  .dl a{display:block;text-decoration:none;color:inherit;border:1px solid var(--line);border-radius:12px;padding:14px 16px;transition:border-color .15s,transform .15s}
-  .dl a:hover{border-color:var(--accent);transform:translateY(-1px)}
-  .dl .t{font-weight:700;font-size:.98rem;display:flex;align-items:center;gap:8px}
-  .dl .d{color:var(--muted);font-size:.84rem;margin-top:3px}
-  .dl .sz{display:inline-block;margin-left:auto;font-size:.74rem;color:var(--muted);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 9px}
-  h2{font-size:1.12rem;margin:0 0 2px}
-  .note{color:var(--muted);font-size:.84rem;margin:6px 2px 0}
-  footer{color:var(--muted);font-size:.82rem;margin-top:30px;border-top:1px solid var(--line);padding-top:16px}
-  a.link{color:var(--accent);text-decoration:none}a.link:hover{text-decoration:underline}
+  .wrap{max-width:1120px;margin:0 auto;padding:34px 22px 80px}
+
+  /* ---- header ---- */
+  header.top{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap;
+    border-bottom:3px double var(--rule);padding-bottom:18px}
+  .eyebrow{font-family:"Space Mono",monospace;font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--accent);margin:0 0 6px}
+  h1{font-family:"Playfair Display",serif;font-weight:800;font-size:2.5rem;line-height:1.05;margin:0 0 8px;letter-spacing:-.01em}
+  .sub{color:var(--muted);font-size:1.02rem;margin:0;max-width:60ch;font-style:italic}
+  .lang{display:inline-flex;border:1px solid var(--rule);border-radius:2px;overflow:hidden;background:var(--card);box-shadow:var(--shadow)}
+  .lang button{border:0;background:transparent;padding:9px 16px;font-family:"Space Mono",monospace;font-size:.74rem;
+    letter-spacing:.08em;text-transform:uppercase;color:var(--muted);cursor:pointer}
+  .lang button + button{border-left:1px solid var(--rule)}
+  .lang button.active{background:var(--accent);color:#f7f1e1}
+
+  /* ---- panels ---- */
+  .card{background:var(--card);border:1px solid var(--rule);border-radius:4px;box-shadow:var(--shadow);
+    padding:22px 24px;margin-top:26px}
+  .kicker{font-family:"Space Mono",monospace;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--accent);margin:0 0 3px}
+  h2{font-family:"Playfair Display",serif;font-weight:700;font-size:1.4rem;margin:0 0 4px}
+
+  /* ---- controls ---- */
+  .controls{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-end;
+    border-bottom:1px solid var(--rule-soft);padding-bottom:16px;margin-bottom:18px}
+  .field{display:flex;flex-direction:column;gap:6px}
+  .field > span.lab{font-family:"Space Mono",monospace;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .years{display:flex;align-items:center;gap:8px}
+  select{appearance:none;background:var(--paper);border:1px solid var(--rule);border-radius:2px;
+    padding:8px 30px 8px 12px;font-family:"EB Garamond",serif;font-size:1rem;color:var(--ink);cursor:pointer;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238a7a5f' stroke-width='3'><path d='M6 9l6 6 6-6'/></svg>");
+    background-repeat:no-repeat;background-position:right 9px center}
+  .years .dash{color:var(--muted)}
+  .seg{display:inline-flex;border:1px solid var(--rule);border-radius:2px;overflow:hidden}
+  .seg button{border:0;background:var(--paper);padding:8px 15px;font-family:"EB Garamond",serif;font-size:.98rem;color:var(--muted);cursor:pointer}
+  .seg button + button{border-left:1px solid var(--rule)}
+  .seg button.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+
+  /* ---- series toggle pills ---- */
+  .series-row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+  .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--rule);background:var(--paper);
+    border-radius:999px;padding:6px 14px 6px 11px;cursor:pointer;font-size:.98rem;color:var(--muted);
+    transition:all .15s;user-select:none}
+  .pill .dot{width:11px;height:11px;border-radius:50%;background:var(--c);box-shadow:0 0 0 2px var(--card)}
+  .pill.on{color:var(--ink);border-color:var(--c);background:color-mix(in srgb,var(--c) 10%,var(--paper))}
+  .pill.off{opacity:.5;text-decoration:line-through}
+  .pill.off .dot{background:var(--muted)}
+
+  /* ---- chart + side returns ---- */
+  .plotgrid{display:grid;grid-template-columns:1fr 268px;gap:20px;align-items:stretch}
+  #chart{width:100%;height:470px}
+  .side{border-left:1px solid var(--rule-soft);padding-left:20px;display:flex;flex-direction:column}
+  .side .win{font-family:"Space Mono",monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+  .side h3{font-family:"Playfair Display",serif;font-weight:700;font-size:1.12rem;margin:0 0 14px}
+  .retlist{display:flex;flex-direction:column;gap:2px}
+  .ret{display:flex;align-items:baseline;gap:10px;padding:9px 0;border-bottom:1px dotted var(--rule)}
+  .ret:last-child{border-bottom:0}
+  .ret .nm{display:flex;align-items:center;gap:8px;flex:1;font-size:.98rem}
+  .ret .nm .dot{width:9px;height:9px;border-radius:50%;background:var(--c)}
+  .ret .val{font-family:"Space Mono",monospace;font-size:1.12rem;font-weight:700;letter-spacing:-.02em}
+  .ret .ann{font-family:"Space Mono",monospace;font-size:.66rem;color:var(--muted);display:block;text-align:right;margin-top:1px}
+  .pos{color:#4f6b4a}.neg{color:#9a3b2b}
+  .caption{color:var(--muted);font-size:.9rem;font-style:italic;margin:14px 2px 0}
+
+  /* ---- downloads ---- */
+  .dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin-top:6px}
+  .dl a{display:block;text-decoration:none;color:inherit;border:1px solid var(--rule);border-radius:3px;
+    padding:15px 17px;background:var(--paper);transition:all .15s}
+  .dl a:hover{border-color:var(--accent);background:var(--accent-soft)}
+  .dl .t{font-family:"Playfair Display",serif;font-weight:700;font-size:1.04rem;display:flex;align-items:center;gap:9px}
+  .dl .d{color:var(--muted);font-size:.92rem;margin-top:3px;font-style:italic}
+  .dl .sz{margin-left:auto;font-family:"Space Mono",monospace;font-size:.66rem;color:var(--muted);
+    border:1px solid var(--rule);border-radius:999px;padding:2px 10px;font-style:normal}
+  .note{color:var(--muted);font-size:.92rem;font-style:italic;margin:4px 2px 14px}
+
+  footer{color:var(--muted);font-size:.9rem;font-style:italic;margin-top:34px;border-top:3px double var(--rule);padding-top:18px}
+
+  @media (max-width:760px){
+    h1{font-size:2rem}
+    .plotgrid{grid-template-columns:1fr}
+    .side{border-left:0;border-top:1px solid var(--rule-soft);padding-left:0;padding-top:16px;margin-top:4px}
+  }
 </style>
 </head>
 <body>
@@ -64,101 +125,101 @@
 
   <header class="top">
     <div>
+      <p class="eyebrow" data-i18n="eyebrow"></p>
       <h1 data-i18n="title"></h1>
       <p class="sub" data-i18n="subtitle"></p>
     </div>
     <div class="lang" role="group" aria-label="language">
-      <button id="lang-pt" class="active" onclick="setLang('pt')">PT</button>
-      <button id="lang-en" onclick="setLang('en')">EN</button>
+      <button id="lang-pt" class="active" onclick="setLang('pt')">Português</button>
+      <button id="lang-en" onclick="setLang('en')">English</button>
     </div>
   </header>
 
   <section class="card">
     <div class="controls">
       <div class="field">
-        <label data-i18n="from"></label>
-        <select id="start"></select>
+        <span class="lab" data-i18n="period"></span>
+        <div class="years">
+          <select id="startY"></select>
+          <span class="dash">—</span>
+          <select id="endY"></select>
+        </div>
       </div>
       <div class="field">
-        <label data-i18n="to"></label>
-        <select id="end"></select>
-      </div>
-      <div class="field">
-        <label data-i18n="view"></label>
+        <span class="lab" data-i18n="view"></span>
         <div class="seg" id="mode">
           <button data-mode="level" class="active" data-i18n="view_level"></button>
           <button data-mode="yoy" data-i18n="view_yoy"></button>
         </div>
       </div>
+      <div class="field" style="flex:1;min-width:260px">
+        <span class="lab" data-i18n="indices"></span>
+        <div class="series-row" id="series"></div>
+      </div>
     </div>
-    <div id="chart"></div>
-    <p class="caption" data-i18n="chart_caption"></p>
+
+    <div class="plotgrid">
+      <div>
+        <div id="chart"></div>
+        <p class="caption" data-i18n="chart_caption"></p>
+      </div>
+      <aside class="side">
+        <div class="win" id="winlabel"></div>
+        <h3 data-i18n="side_title"></h3>
+        <div class="retlist" id="retlist"></div>
+      </aside>
+    </div>
   </section>
 
   <section class="card">
-    <h2 data-i18n="table_title"></h2>
-    <p class="note" data-i18n="table_note"></p>
-    <table class="rt">
-      <thead>
-        <tr>
-          <th data-i18n="col_series"></th>
-          <th data-i18n="col_cum"></th>
-          <th data-i18n="col_ann"></th>
-        </tr>
-      </thead>
-      <tbody id="rtbody"></tbody>
-    </table>
-  </section>
-
-  <section class="card">
+    <p class="kicker" data-i18n="dl_kicker"></p>
     <h2 data-i18n="dl_title"></h2>
     <p class="note" data-i18n="dl_note"></p>
     <div class="dl" id="downloads"></div>
   </section>
 
-  <footer>
-    <span data-i18n="footer"></span>
-  </footer>
+  <footer><span data-i18n="footer"></span></footer>
 </div>
 
 <script>
 // ---- series styling + labels -------------------------------------------------
-const COLORS = {cs_sp:"#0b5394", ipca:"#d64545", cdi:"#3d8b4f", fipezap:"#7c5cbf", ibovespa:"#e0922a"};
+const COLORS = {cs_sp:"#7a2e22", ipca:"#a6791f", cdi:"#4f6b4a", fipezap:"#6a4b62", ibovespa:"#3f6076"};
+const WIDTHS = {cs_sp:3.6, ipca:1.4, cdi:1.4, fipezap:1.4, ibovespa:1.3};
 const SERIES = (window.CS_DATA && window.CS_DATA.series) || ["cs_sp","ipca","cdi","fipezap","ibovespa"];
 const ROWS = (window.CS_DATA && window.CS_DATA.rows) || [];
 
 // ---- i18n --------------------------------------------------------------------
+const LABELS = {cs_sp:"Case-Shiller", ipca:"IPCA", cdi:"CDI", fipezap:"FipeZAP", ibovespa:"Ibovespa"};
 const I18N = {
   pt:{
+    eyebrow:"Preços de imóveis · São Paulo",
     title:"Índice Case-Shiller — São Paulo",
-    subtitle:"Índice de preços de imóveis por vendas repetidas para a cidade de São Paulo, comparado a IPCA, CDI, FipeZAP e Ibovespa (2010–2025).",
-    from:"De", to:"Até", view:"Visualização",
+    subtitle:"Índice de preços de imóveis por vendas repetidas, comparado a IPCA, CDI, FipeZAP e Ibovespa (2010–2025).",
+    period:"Período", view:"Visualização", indices:"Índices",
     view_level:"Nível (base 100)", view_yoy:"Variação 12m",
-    chart_caption:"Todas as séries começam em 100 no mês inicial selecionado. Passe o mouse para ver os valores; clique na legenda para ocultar séries.",
-    table_title:"Retorno acumulado no período selecionado",
-    table_note:"Retorno total e retorno anualizado entre os dois meses escolhidos acima.",
-    col_series:"Série", col_cum:"Acumulado", col_ann:"Anualizado",
-    dl_title:"Dados e documentos", dl_note:"Os microdados de transações são grandes e disponibilizados apenas para download (compactados).",
-    footer:"Índice construído a partir de microdados do ITBI (Imposto sobre Transmissão de Bens Imóveis) da cidade de São Paulo. Metodologia de vendas repetidas (Case-Shiller).",
-    labels:{cs_sp:"Case-Shiller SP", ipca:"IPCA", cdi:"CDI", fipezap:"FipeZAP", ibovespa:"Ibovespa"}
+    chart_caption:"Séries reindexadas a 100 no início do período. Passe o mouse para ler os valores.",
+    side_title:"Retorno acumulado", side_ann:"a.a.",
+    chart_caption_yoy:"Variação percentual em 12 meses. Passe o mouse para ler os valores.",
+    dl_kicker:"Download", dl_title:"Dados e documentos",
+    dl_note:"Os microdados de transações são grandes e disponibilizados apenas para download (compactados).",
+    footer:"Índice construído a partir de microdados do ITBI da cidade de São Paulo, pela metodologia de vendas repetidas (Case-Shiller)."
   },
   en:{
+    eyebrow:"House prices · São Paulo",
     title:"Case-Shiller Index — São Paulo",
-    subtitle:"Repeat-sales house price index for the city of São Paulo, benchmarked against IPCA, CDI, FipeZAP and the Ibovespa (2010–2025).",
-    from:"From", to:"To", view:"View",
+    subtitle:"Repeat-sales house price index, benchmarked against IPCA, CDI, FipeZAP and the Ibovespa (2010–2025).",
+    period:"Period", view:"View", indices:"Indices",
     view_level:"Level (base 100)", view_yoy:"Year-over-year",
-    chart_caption:"All series are rebased to 100 at the selected start month. Hover to read values; click the legend to hide series.",
-    table_title:"Cumulative return over the selected window",
-    table_note:"Total and annualized return between the two months chosen above.",
-    col_series:"Series", col_cum:"Cumulative", col_ann:"Annualized",
-    dl_title:"Data & documents", dl_note:"The transaction microdata are large and provided as a compressed download only.",
-    footer:"Index built from São Paulo property-transfer-tax (ITBI) microdata using the repeat-sales (Case-Shiller) methodology.",
-    labels:{cs_sp:"Case-Shiller SP", ipca:"IPCA", cdi:"CDI", fipezap:"FipeZAP", ibovespa:"Ibovespa"}
+    chart_caption:"Series rebased to 100 at the start of the period. Hover to read values.",
+    side_title:"Cumulative return", side_ann:"p.a.",
+    chart_caption_yoy:"Percent change over twelve months. Hover to read values.",
+    dl_kicker:"Download", dl_title:"Data & documents",
+    dl_note:"The transaction microdata are large and provided as a compressed download only.",
+    footer:"Index built from São Paulo property-transfer-tax (ITBI) microdata using the repeat-sales (Case-Shiller) methodology."
   }
 };
 
-// ---- downloads (edit paths/URLs after you create the Release) ----------------
-// Replace RELEASE_URL with your GitHub Release asset link once uploaded.
+// ---- downloads ---------------------------------------------------------------
 const RELEASE_URL = "https://github.com/otaviolmbraga/sp-housing-index/releases/download/data-v1/itbi_compilado.csv.gz";
 const DOWNLOADS = [
   {kind:"data", url:RELEASE_URL, size:"192 MB (.csv.gz)",
@@ -173,140 +234,146 @@ const DOWNLOADS = [
 ];
 
 // ---- state -------------------------------------------------------------------
-let LANG = "pt";
-let MODE = "level";
-const months = ROWS.map(r => r.date);
+let LANG="pt", MODE="level";
+const ACTIVE = new Set(SERIES);                       // all on by default
+const months = ROWS.map(r => r.date);                 // "YYYY-MM"
+const years = [...new Set(months.map(m => m.slice(0,4)))];
 
-function fmtMonth(ym){
-  const [y,m] = ym.split("-");
-  const MON = {pt:["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"],
-               en:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]};
-  return MON[LANG][parseInt(m,10)-1] + " " + y;
-}
+// ---- helpers -----------------------------------------------------------------
 function pct(x){ return (x>=0?"+":"") + (x*100).toFixed(1) + "%"; }
+function monthsOfYear(y){ return months.filter(m => m.slice(0,4)===y); }
+function windowIdx(){
+  let sy=document.getElementById("startY").value, ey=document.getElementById("endY").value;
+  if(sy>ey){ const t=sy; sy=ey; ey=t; }
+  const lo = months.indexOf(monthsOfYear(sy)[0]);
+  const eyMonths = monthsOfYear(ey); const hi = months.indexOf(eyMonths[eyMonths.length-1]);
+  return {lo, hi};
+}
 
-// ---- populate month pickers --------------------------------------------------
-function fillPickers(){
-  const s = document.getElementById("start"), e = document.getElementById("end");
-  const prevS = s.value, prevE = e.value;
-  s.innerHTML = ""; e.innerHTML = "";
-  months.forEach(ym => {
-    const o1 = document.createElement("option"); o1.value = ym; o1.textContent = fmtMonth(ym); s.appendChild(o1);
-    const o2 = document.createElement("option"); o2.value = ym; o2.textContent = fmtMonth(ym); e.appendChild(o2);
+// ---- build controls ----------------------------------------------------------
+function fillYears(){
+  const s=document.getElementById("startY"), e=document.getElementById("endY");
+  const ps=s.value, pe=e.value; s.innerHTML=""; e.innerHTML="";
+  years.forEach(y=>{
+    const a=document.createElement("option"); a.value=y; a.textContent=y; s.appendChild(a);
+    const b=document.createElement("option"); b.value=y; b.textContent=y; e.appendChild(b);
   });
-  s.value = prevS || months[0];
-  e.value = prevE || months[months.length-1];
+  s.value=ps||years[0];
+  e.value=pe||years[years.length-1];
+}
+function buildSeriesPills(){
+  const box=document.getElementById("series"); box.innerHTML="";
+  SERIES.forEach(key=>{
+    const on=ACTIVE.has(key);
+    const b=document.createElement("button");
+    b.className="pill "+(on?"on":"off");
+    b.style.setProperty("--c", COLORS[key]);
+    b.innerHTML=`<span class="dot"></span>${LABELS[key]}`;
+    b.onclick=()=>{ if(ACTIVE.has(key)) ACTIVE.delete(key); else ACTIVE.add(key); buildSeriesPills(); render(); };
+    box.appendChild(b);
+  });
 }
 
 // ---- chart -------------------------------------------------------------------
 function draw(){
-  const si = months.indexOf(document.getElementById("start").value);
-  const ei = months.indexOf(document.getElementById("end").value);
-  const lo = Math.min(si,ei), hi = Math.max(si,ei);
-  const window_ = ROWS.slice(lo, hi+1);
-  const L = I18N[LANG].labels;
-
-  const traces = SERIES.map(key => {
-    let x = [], y = [];
-    if(MODE === "level"){
-      const base = ROWS[lo][key];
-      window_.forEach(r => { x.push(r.date+"-01"); y.push(base ? (r[key]/base*100) : null); });
-    } else {
-      window_.forEach(r => { x.push(r.date+"-01"); const v=r[key+"_yoy"]; y.push(v==null?null:v*100); });
+  const {lo,hi}=windowIdx();
+  const slice=ROWS.slice(lo,hi+1);
+  const keys=SERIES.filter(k=>ACTIVE.has(k));
+  const traces=keys.map(key=>{
+    let x=[],y=[];
+    if(MODE==="level"){
+      const base=ROWS[lo][key];
+      slice.forEach(r=>{ x.push(r.date+"-01"); y.push(base?(r[key]/base*100):null); });
+    }else{
+      slice.forEach(r=>{ x.push(r.date+"-01"); const v=r[key+"_yoy"]; y.push(v==null?null:v*100); });
     }
-    return {
-      x, y, name:L[key], mode:"lines", type:"scatter",
-      line:{color:COLORS[key], width: key==="cs_sp"?3.2:1.8},
-      hovertemplate:"%{y:.1f}"+(MODE==="level"?"":"%")+"<extra>"+L[key]+"</extra>"
-    };
+    return {x,y,name:LABELS[key],mode:"lines",type:"scatter",
+      line:{color:COLORS[key],width:WIDTHS[key],shape:"spline",smoothing:0.4},
+      hovertemplate:"%{y:.1f}"+(MODE==="level"?"":"%")+"<extra>"+LABELS[key]+"</extra>"};
   });
-
-  const layout = {
-    margin:{l:52,r:16,t:10,b:40},
+  const layout={
+    margin:{l:48,r:12,t:12,b:34},
     hovermode:"x unified",
     paper_bgcolor:"rgba(0,0,0,0)", plot_bgcolor:"rgba(0,0,0,0)",
-    font:{family:"-apple-system,Segoe UI,Roboto,Arial,sans-serif", color:"#1b2430", size:13},
-    legend:{orientation:"h", y:-0.16, x:0, font:{size:12}},
-    xaxis:{showgrid:false, tickformat:"%b %Y", tickfont:{color:"#5d6b7a"}, linecolor:"#e6e9ee"},
-    yaxis:{gridcolor:"#eef1f5", zeroline:MODE==="yoy", zerolinecolor:"#d6dbe2",
-           ticksuffix: MODE==="yoy" ? "%" : "", tickfont:{color:"#5d6b7a"}},
+    font:{family:"'EB Garamond', Georgia, serif", color:"#34291d", size:14},
+    showlegend:false,
+    xaxis:{showgrid:false, tickformat:"%Y", dtick:"M12", tickfont:{color:"#8a7a5f"}, linecolor:"#cdbe9c"},
+    yaxis:{gridcolor:"#ded0ad", griddash:"dot", zeroline:MODE==="yoy", zerolinecolor:"#cdbe9c",
+           ticksuffix:MODE==="yoy"?"%":"", tickfont:{color:"#8a7a5f"}}
   };
-  Plotly.react("chart", traces, layout, {responsive:true, displayModeBar:true,
-    displaylogo:false, modeBarButtonsToRemove:["lasso2d","select2d","autoScale2d"]});
+  Plotly.react("chart",traces,layout,{responsive:true,displayModeBar:false});
 }
 
-// ---- returns table -----------------------------------------------------------
-function drawTable(){
-  const si = months.indexOf(document.getElementById("start").value);
-  const ei = months.indexOf(document.getElementById("end").value);
-  const lo = Math.min(si,ei), hi = Math.max(si,ei);
-  const nmonths = hi - lo;
-  const L = I18N[LANG].labels;
-  const body = document.getElementById("rtbody");
-  body.innerHTML = "";
-  SERIES.forEach(key => {
-    const a = ROWS[lo][key], b = ROWS[hi][key];
+// ---- side returns ------------------------------------------------------------
+function drawReturns(){
+  const {lo,hi}=windowIdx();
+  const nmonths=hi-lo;
+  const t=I18N[LANG];
+  document.getElementById("winlabel").textContent = months[lo].slice(0,4)+" – "+months[hi].slice(0,4);
+  const box=document.getElementById("retlist"); box.innerHTML="";
+  SERIES.filter(k=>ACTIVE.has(k)).forEach(key=>{
+    const a=ROWS[lo][key], b=ROWS[hi][key];
     let cum=null, ann=null;
-    if(a && b){ cum = b/a - 1; ann = nmonths>0 ? Math.pow(b/a, 12/nmonths)-1 : 0; }
-    const tr = document.createElement("tr");
-    const cumC = cum==null?"" : (cum>=0?"pos":"neg");
-    const annC = ann==null?"" : (ann>=0?"pos":"neg");
-    tr.innerHTML =
-      `<td><span class="swatch" style="background:${COLORS[key]}"></span>${L[key]}</td>`+
-      `<td class="${cumC}">${cum==null?"—":pct(cum)}</td>`+
-      `<td class="${annC}">${ann==null?"—":pct(ann)}</td>`;
-    body.appendChild(tr);
+    if(a&&b){ cum=b/a-1; ann=nmonths>0?Math.pow(b/a,12/nmonths)-1:0; }
+    const row=document.createElement("div"); row.className="ret";
+    const cls=cum==null?"":(cum>=0?"pos":"neg");
+    row.innerHTML=
+      `<span class="nm"><span class="dot" style="background:${COLORS[key]}"></span>${LABELS[key]}</span>`+
+      `<span><span class="val ${cls}">${cum==null?"—":pct(cum)}</span>`+
+      `<span class="ann">${ann==null?"":pct(ann)+" "+t.side_ann}</span></span>`;
+    box.appendChild(row);
   });
+  if(box.children.length===0){ box.innerHTML=`<div class="ret" style="color:var(--muted);font-style:italic">—</div>`; }
 }
 
 // ---- downloads ---------------------------------------------------------------
 function drawDownloads(){
-  const box = document.getElementById("downloads");
-  box.innerHTML = "";
-  DOWNLOADS.forEach(d => {
-    const a = document.createElement("a");
-    a.href = d.url; if(d.kind==="data") a.setAttribute("download","");
-    const icon = d.kind==="pdf" ? "📄" : "⬇";
-    a.innerHTML = `<div class="t">${icon} ${LANG==="pt"?d.t_pt:d.t_en}<span class="sz">${d.size}</span></div>`+
-                  `<div class="d">${LANG==="pt"?d.d_pt:d.d_en}</div>`;
+  const box=document.getElementById("downloads"); box.innerHTML="";
+  DOWNLOADS.forEach(d=>{
+    const a=document.createElement("a"); a.href=d.url; if(d.kind==="data") a.setAttribute("download","");
+    const icon=d.kind==="pdf"?"❧":"⬇";
+    a.innerHTML=`<div class="t">${icon} ${LANG==="pt"?d.t_pt:d.t_en}<span class="sz">${d.size}</span></div>`+
+                `<div class="d">${LANG==="pt"?d.d_pt:d.d_en}</div>`;
     box.appendChild(a);
   });
 }
 
-// ---- i18n apply --------------------------------------------------------------
+// ---- i18n --------------------------------------------------------------------
 function applyI18n(){
-  const t = I18N[LANG];
-  document.documentElement.lang = LANG;
-  document.querySelectorAll("[data-i18n]").forEach(el => {
-    const k = el.getAttribute("data-i18n");
-    if(t[k] != null) el.textContent = t[k];
+  const t=I18N[LANG]; document.documentElement.lang=LANG;
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
+    const k=el.getAttribute("data-i18n"); if(t[k]!=null) el.textContent=t[k];
   });
-  document.title = t.title;
+  // caption depends on mode
+  const cap=document.querySelector('[data-i18n="chart_caption"]');
+  if(cap) cap.textContent = MODE==="yoy" ? t.chart_caption_yoy : t.chart_caption;
+  document.title=t.title;
 }
 function setLang(l){
-  LANG = l;
-  document.getElementById("lang-pt").classList.toggle("active", l==="pt");
-  document.getElementById("lang-en").classList.toggle("active", l==="en");
-  const sv=document.getElementById("start").value, ev=document.getElementById("end").value;
-  applyI18n(); fillPickers();
-  document.getElementById("start").value=sv; document.getElementById("end").value=ev;
-  draw(); drawTable(); drawDownloads();
+  LANG=l;
+  document.getElementById("lang-pt").classList.toggle("active",l==="pt");
+  document.getElementById("lang-en").classList.toggle("active",l==="en");
+  applyI18n(); drawDownloads(); drawReturns();
 }
 
-// ---- wire up -----------------------------------------------------------------
-document.getElementById("mode").addEventListener("click", e => {
-  const b = e.target.closest("button[data-mode]"); if(!b) return;
-  MODE = b.dataset.mode;
-  document.querySelectorAll("#mode button").forEach(x => x.classList.toggle("active", x===b));
-  draw();
-});
-document.getElementById("start").addEventListener("change", () => { draw(); drawTable(); });
-document.getElementById("end").addEventListener("change", () => { draw(); drawTable(); });
+// ---- render orchestration ----------------------------------------------------
+function render(){ applyI18n(); draw(); drawReturns(); }
 
+// ---- wire up -----------------------------------------------------------------
+document.getElementById("mode").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-mode]"); if(!b) return;
+  MODE=b.dataset.mode;
+  document.querySelectorAll("#mode button").forEach(x=>x.classList.toggle("active",x===b));
+  render();
+});
+document.getElementById("startY").addEventListener("change",render);
+document.getElementById("endY").addEventListener("change",render);
+
+fillYears();
+buildSeriesPills();
 applyI18n();
-fillPickers();
 draw();
-drawTable();
+drawReturns();
 drawDownloads();
 </script>
 </body>
