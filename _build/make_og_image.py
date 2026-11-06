@@ -17,12 +17,12 @@ CSV = os.path.join(ROOT, "data", "ivr_sp_index.csv")
 OUT = os.path.join(ROOT, "og-image.png")
 
 # palette (matches index.html)
-PAPER = "#ece3cf"
-CARD = "#f7f1e1"
-INK = "#34291d"
-ACCENT = "#7a2e22"
-MUTED = "#8a7a5f"
-RULE = "#cdbe9c"
+PAPER = "#eef1f5"
+CARD = "#ffffff"
+INK = "#23282f"
+ACCENT = "#012169"
+MUTED = "#6c7580"
+RULE = "#ccd4dc"
 
 # ---- read series -------------------------------------------------------------
 dates, cs = [], []
